@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Parcial_1</string>
+    <string-array name="conversorArea">
+        <item>Pie Cuadrado</item>
+        <item>Vara Cuadrada</item>
+        <item>Yarda Cuadrada</item>
+        <item>Metro Cuadrado</item>
+        <item>Metros cuadrados</item>
+        <item>Kilómetros cuadrados</item>
+        <item>Tareas</item>
+        <item>Manzana</item>
+        <item>Hectárea</item>
+    </string-array>
 </resources>
