@@ -19,6 +19,12 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
+        Tarifa tarifa=new Tarifa();
+        tarifa.inicilizarIntervalos();
+        //tarifa.setMetrosCubicos(26);
+       // System.out.println("MetrosCubicos "+tarifa.getMetrosCubicos());
+        System.out.println("TotalAPagar "+tarifa.calcularTotalAPagar(100));
+        //tarifa.imprimirIntervalos(tarifa.getIntervalos());
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.ugb.miprimercalculadora", appContext.getPackageName());
