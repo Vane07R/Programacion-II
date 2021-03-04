@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
 class conversores {
 
     Double[][] conversor = {
