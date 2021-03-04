@@ -10,10 +10,10 @@
         android:id="@+id/lbltitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OPERACIONES BASICAS"
+        android:text="PARCIAL_1"
         android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="130dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="160dp"/>
 
     <EditText
         android:id="@+id/txtnum1"
@@ -21,95 +21,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lbltitulo"
         android:layout_marginTop="5dp"
-        android:hint="Ingrese el número 1"
+        android:hint="m3 de Agua consumido"
         android:inputType="number" />
 
-    <EditText
-        android:id="@+id/txtnum2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtnum1"
-        android:layout_marginTop="5dp"
-        android:hint="Ingrese el númereo 2"
-        android:inputType="number" />
-
-    <RadioGroup
-        android:id="@+id/optOperacionesBasicas"
-        android:layout_width="101dp"
-        android:layout_height="491dp"
-        android:layout_below="@id/txtnum2"
-        android:layout_marginTop="5dp">
-
-        <RadioButton
-            android:id="@+id/optSuma"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:checked="true"
-            android:text="+" />
-
-        <RadioButton
-            android:id="@+id/optResta"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:text="-" />
-
-        <RadioButton
-            android:id="@+id/optMultiplicacion"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="*" />
-
-        <RadioButton
-            android:id="@+id/optDivision"
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:text="/" />
-
-        <RadioButton
-            android:id="@+id/optFactorial"
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:text="!" />
-
-        <RadioButton
-            android:id="@+id/optPorcentaje"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="%" />
-
-        <RadioButton
-            android:id="@+id/optExponenciacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="^" />
-
-        <RadioButton
-            android:id="@+id/optRaiz"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:text="√" />
-
-        <RadioButton
-            android:id="@+id/optModulo"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:text="Mod" />
-
-        <RadioButton
-            android:id="@+id/optMayor2"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:text=">=" />
-
-    </RadioGroup>
 
     <TextView
         android:id="@+id/lblrespuesta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtnum2"
+        android:layout_below="@id/btncalcular"
         android:layout_marginLeft="140dp"
-        android:layout_marginTop="377dp"
+        android:layout_marginTop="38dp"
         android:text="Respuesta:?"
         android:textSize="18sp" />
 
@@ -117,8 +39,8 @@
         android:id="@+id/btncalcular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtnum2"
-        android:layout_marginTop="428dp"
+        android:layout_below="@+id/txtnum1"
+        android:layout_marginTop="74dp"
         android:layout_marginBottom="10dp"
         android:onClick="calcular"
         android:text="CALCULAR" />
