@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 class conversores {
 
     Double[][] conversor = {
-            {1.0,0.1323,0.111111,0.092903,0.00014774656489, 0.000013188960818,0.0000092903}
+            {1., 10.76391, 0.698896, 1.19599, 0.0022857143, 0.0001428571, 0.0001}
     };
 
     public double covertir(int option, int de, int a, double cantidad) {
