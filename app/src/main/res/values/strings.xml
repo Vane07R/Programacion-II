@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Parcial_1</string>
     <string-array name="conversorArea">
+        <item>Metro Cuadrado</item>
         <item>Pie Cuadrado</item>
         <item>Vara Cuadrada</item>
         <item>Yarda Cuadrada</item>
-        <item>Metro Cuadrado</item>
         <item>Tareas</item>
         <item>Manzana</item>
         <item>Hectárea</item>
