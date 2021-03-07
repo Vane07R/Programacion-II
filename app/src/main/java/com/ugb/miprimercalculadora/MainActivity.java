@@ -1,30 +1,31 @@
 package com.ugb.miprimercalculadora;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     TabHost tbhConversores;
     RelativeLayout contenidoView;
-
-
+    Button btncalcularAre;
+    Spinner spnOptionDe, spnOptionA;
+    conversores miConversor = new conversores();
+    TextView tempVal;
 
     private Tarifa tarifa;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.tarifa=new Tarifa();
+        this.tarifa = new Tarifa();
         this.tarifa.inicilizarIntervalos();
 
         contenidoView = findViewById(R.id.vista);
@@ -34,8 +35,33 @@ public class MainActivity extends AppCompatActivity {
         tbhConversores.addTab(tbhConversores.newTabSpec("Agua").setContent(R.id.Agua).setIndicator("Agua"));
         tbhConversores.addTab(tbhConversores.newTabSpec("Area").setContent(R.id.tabArea).setIndicator("Area"));
 
+
+
+        btncalcularAre = findViewById(R.id.btncalcularAre);
+        btncalcularAre.setOnClickListener(new View.OnClickListener()
+    {
+        @Override
+        public void onClick (View v){
+        try {
+
+            tempVal = (EditText) findViewById(R.id.txtcantidadAre);
+            Double cantidad = Double.parseDouble(tempVal.getText().toString());
+
+            spnOptionDe = findViewById(R.id.cboDeArea);
+            spnOptionA = findViewById(R.id.cboDeAre);
+            tempVal = findViewById(R.id.IblRespuestaAre);
+            tempVal.setText("Respuesta: " + miConversor.covertir(0, spnOptionDe.getSelectedItemPosition(), spnOptionA.getSelectedItemPosition(), cantidad));
+        } catch (Exception ex) {
+            tempVal = findViewById(R.id.IblRespuestaAre);
+            tempVal.setText("Por favor ingrese la cantidad");
+            Toast.makeText(getApplicationContext(), "Por favor ingrese los valores indicados " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
-    public void calcular (View view){
+    });
+}
+
+
+    public void calcular (View V){
         EditText txtnum1 = (EditText) findViewById(R.id.txtnum1);
         TextView lblrespuesta = (TextView) findViewById(R.id.lblrespuesta);
         double metrosCubicos = 0;
@@ -49,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
 class conversores {
 
     Double[][] conversor = {
