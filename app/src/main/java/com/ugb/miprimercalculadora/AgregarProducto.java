@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,12 +27,18 @@ public class AgregarProducto extends AppCompatActivity {
     FloatingActionButton btnAtras;
     ImageView imgFotoProducto;
     Intent tomarFotoIntent;
-    String urlCompletaImg;
+    String urlCompletaImg, idProducto, accion;
+    Button btn;
+    DB miBD;
+    TextView tempVal;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_producto);
 
+        miBD = new DB(getApplicationContext(),"",null,1);
         btnAtras = findViewById(R.id.btnAtras);
         btnAtras.setOnClickListener(v->{
             mostrarVistaPrincipal();
@@ -40,6 +48,31 @@ public class AgregarProducto extends AppCompatActivity {
         imgFotoProducto=findViewById(R.id.imgFotoProducto);
         imgFotoProducto.setOnClickListener(v ->{
             tomarFotoProducto();
+        });
+
+        btn = findViewById(R.id.btnGuardarProducto);
+        btn.setOnClickListener(v ->{
+            tempVal = findViewById(R.id.txtNombre);
+            String nombre = tempVal.getText().toString();
+
+            tempVal = findViewById(R.id.txtTipoDeProducto);
+            String Descripcion  = tempVal.getText().toString();
+
+            tempVal = findViewById(R.id.txtCodigo);
+            String codigo = tempVal.getText().toString();
+
+            tempVal = findViewById(R.id.txtAdvertencias);
+            String Advertencias = tempVal.getText().toString();
+
+            tempVal = findViewById(R.id.txtAPrecio);
+            String precio = tempVal.getText().toString();
+
+            String[] datos = {idProducto,nombre,Descripcion,codigo, Advertencias, precio, urlCompletaImg};
+            miBD.administracion_productos(accion,datos);
+            mostrarMsgToast("Producto guardado con exito.");
+
+            mostrarVistaPrincipal();
+
         });
     }
     private void mostrarVistaPrincipal(){
