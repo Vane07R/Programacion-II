@@ -68,7 +68,7 @@ public class AgregarProducto extends AppCompatActivity {
             String precio = tempVal.getText().toString();
 
             String[] datos = {idProducto,nombre,Descripcion,codigo, Advertencias, precio, urlCompletaImg};
-            miBD.administracion_productos(accion,datos);
+            miBD.administracion_productos("nuevo",datos);
             mostrarMsgToast("Producto guardado con exito.");
 
             mostrarVistaPrincipal();

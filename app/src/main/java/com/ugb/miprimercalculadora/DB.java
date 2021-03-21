@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 public class DB extends SQLiteOpenHelper {
     static String nombreDB = "db_Tienda";
-    static String tblProductos = "CREATE TABLE tblproductos (idproductos interger primary key autoincrement, nombre text, descripcion text, codigo text, advertencias text, precio text, urlPhoto text)";
+    static String tblProductos = "CREATE TABLE tblproductos (idproductos integer primary key autoincrement, nombre text, descripcion text, codigo text, advertencias text, precio text, urlPhoto text)";
 
     public DB(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, nombreDB, factory, version); //CREATE DATABASE db_Tienda;
@@ -38,7 +38,7 @@ public class DB extends SQLiteOpenHelper {
                 break;
 
             case "nuevo":
-                sqLiteDatabaseW.execSQL("INSERT INTO tblproductos(nombre, descripcion, codigo, advertencia, precio, urlPhoto) VALUES ('\"+datos[1]+\"','\"+datos[2]+\"','\"+datos[3]+\"','\"+datos[4]+\"','\"+datos[5]+\"','\"+datos[6]+\"')");
+                sqLiteDatabaseW.execSQL("INSERT INTO tblproductos(nombre, descripcion, codigo, advertencias, precio, urlPhoto) VALUES ('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"')");
 
 
         }
