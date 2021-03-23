@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
             productosArrayList.add(mis_productos);
         }while (datosProdutoCursor.moveToNext());
-
+adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+ltsProductos.setAdapter(adaptadorImagenes);
+registerForContextMenu(ltsProductos);
     }
     private void mostrarMsgToast(String mgs){
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
