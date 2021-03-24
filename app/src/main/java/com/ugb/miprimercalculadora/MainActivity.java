@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ListView ltsProductos;
     Cursor datosProdutoCursor = null;
     ArrayList<productos>productosArrayList= new ArrayList<productos>();
+    ArrayList<productos>productosArrayListCopy= new ArrayList<productos>();
     productos mis_productos;
 
 
@@ -33,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btn=findViewById(R.id.btnAgregarProducto);
-        btn.setOnClickListener( V -> {
-            new AgregarProducto();
+        btn.setOnClickListener(v->{
+           agregarProductos();
         });
         obtenerDatosProducto();
+        buscarProductos();
 
+    }
+    private void agregarProductos(){
         Intent AgregarProducto = new Intent(getApplicationContext(), AgregarProducto.class);
         startActivity(AgregarProducto);
     }
@@ -48,29 +54,72 @@ public class MainActivity extends AppCompatActivity {
             mostarDatosProducto();
         } else {//sino que llame para agregar nuevos productos...
             mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
-           new AgregarProducto();
+            new AgregarProducto();
         }
 
     }
+    private void buscarProductos(){
+        TextView tempVal =findViewById(R.id.txtBuscarProductos);
+        tempVal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+              try {
+                  productosArrayList.clear();
+                 if(tempVal.getText().toString().trim().length()<1 ){
+                     productosArrayList.addAll(productosArrayListCopy);
+                 }else{//si esta buscando entonces filtramos los datos
+                     for(productos am: productosArrayListCopy){
+                         String nombre = am.getNombre();
+                         if(nombre.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
+                             productosArrayList.add(am);
+                         }
+                     }
+                 }
+                 adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+                 ltsProductos.setAdapter(adaptadorImagenes);
+
+              }catch (Exception e){
+                  mostrarMsgToast(e.getMessage());
+              }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
     private void mostarDatosProducto(){
         ltsProductos = findViewById(R.id.ltsAgregarProductos);
         productosArrayList.clear();
+        productosArrayListCopy.clear();
         do {
             mis_productos = new productos(
                     datosProdutoCursor.getString(0),//idProducto
                     datosProdutoCursor.getString(1),//nombre
                     datosProdutoCursor.getString(2),//Descripcion
                     datosProdutoCursor.getString(3),//codigo
-                    datosProdutoCursor.getString(4),//precio
-                    datosProdutoCursor.getString(5),//Advertencias
+                    datosProdutoCursor.getString(4),//Advertencias
+                    datosProdutoCursor.getString(5),//precio
                     datosProdutoCursor.getString(6) //urlPhoto
             );
 
             productosArrayList.add(mis_productos);
         }while (datosProdutoCursor.moveToNext());
-adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
-ltsProductos.setAdapter(adaptadorImagenes);
-registerForContextMenu(ltsProductos);
+        adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+        ltsProductos.setAdapter(adaptadorImagenes);
+
+        registerForContextMenu(ltsProductos);
+
+        productosArrayListCopy.addAll(productosArrayList);
     }
     private void mostrarMsgToast(String mgs){
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
@@ -135,6 +184,7 @@ class productos{
     public void setAdvertencias(String advertencias) {
         this.Advertencias = Advertencias;
     }
+
     public String getPrecio() {
         return precio;
     }

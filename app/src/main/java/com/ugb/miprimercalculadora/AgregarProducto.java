@@ -40,7 +40,7 @@ public class AgregarProducto extends AppCompatActivity {
 
         miBD = new DB(getApplicationContext(),"",null,1);
         btnAtras = findViewById(R.id.btnAtras);
-        btnAtras.setOnClickListener(v->{
+        btnAtras.setOnClickListener(v-> {
             mostrarVistaPrincipal();
 
         });
@@ -74,7 +74,9 @@ public class AgregarProducto extends AppCompatActivity {
             mostrarVistaPrincipal();
 
         });
+
     }
+
     private void mostrarVistaPrincipal(){
         Intent iprincipal = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(iprincipal);
