@@ -1,5 +1,6 @@
 package com.ugb.miprimercalculadora;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,7 +8,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -37,27 +42,46 @@ public class MainActivity extends AppCompatActivity {
 
         btn=findViewById(R.id.btnAgregarProducto);
         btn.setOnClickListener(v->{
-           agregarProductos();
+           agregarProductos("nuevo",new String[]{});
         });
         obtenerDatosProducto();
         buscarProductos();
 
     }
-    private void agregarProductos(){
-        Intent AgregarProducto = new Intent(getApplicationContext(), AgregarProducto.class);
-        startActivity(AgregarProducto);
-    }
-    private void obtenerDatosProducto(){
-        miBD = new DB(getApplicationContext(),"",null,1);
-        datosProdutoCursor = miBD.administracion_productos("consultar",null);
-        if( datosProdutoCursor.moveToFirst() ){//si hay productos que mostrar
-            mostarDatosProducto();
-        } else {//sino que llame para agregar nuevos productos...
-            mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
-            new AgregarProducto();
-        }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.menu_productos,menu);
 
+        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo= (AdapterView.AdapterContextMenuInfo)menuInfo;
+        datosProdutoCursor.moveToPosition(adapterContextMenuInfo.position);
+        menu.setHeaderTitle(datosProdutoCursor.getString(1));
     }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+       switch (item.getItemId()){
+           case R.id.mnxAgregar:
+               agregarProductos("nuevo",new String[]{});
+               break;
+           case R.id.mnxModificar:
+               String[] datos= {
+                       datosProdutoCursor.getString(0),//idProducto
+                       datosProdutoCursor.getString(1),//nombre
+                       datosProdutoCursor.getString(2),//Descripcion
+                       datosProdutoCursor.getString(3),//codigo
+                       datosProdutoCursor.getString(4),//Advertencias
+                       datosProdutoCursor.getString(5),//precio
+                       datosProdutoCursor.getString(6) //urlPhoto
+               };
+               agregarProductos("modificar",datos);
+               break;
+
+       }
+       return super.onContextItemSelected(item);
+    }
+
     private void buscarProductos(){
         TextView tempVal =findViewById(R.id.txtBuscarProductos);
         tempVal.addTextChangedListener(new TextWatcher() {
@@ -68,24 +92,24 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-              try {
-                  productosArrayList.clear();
-                 if(tempVal.getText().toString().trim().length()<1 ){
-                     productosArrayList.addAll(productosArrayListCopy);
-                 }else{//si esta buscando entonces filtramos los datos
-                     for(productos am: productosArrayListCopy){
-                         String nombre = am.getNombre();
-                         if(nombre.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
-                             productosArrayList.add(am);
-                         }
-                     }
-                 }
-                 adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
-                 ltsProductos.setAdapter(adaptadorImagenes);
+                try {
+                    productosArrayList.clear();
+                    if(tempVal.getText().toString().trim().length()<1 ){
+                        productosArrayList.addAll(productosArrayListCopy);
+                    }else{//si esta buscando entonces filtramos los datos
+                        for(productos am: productosArrayListCopy){
+                            String nombre = am.getNombre();
+                            if(nombre.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
+                                productosArrayList.add(am);
+                            }
+                        }
+                    }
+                    adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+                    ltsProductos.setAdapter(adaptadorImagenes);
 
-              }catch (Exception e){
-                  mostrarMsgToast(e.getMessage());
-              }
+                }catch (Exception e){
+                    mostrarMsgToast(e.getMessage());
+                }
 
             }
 
@@ -94,6 +118,31 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void agregarProductos(String accion,String[] datos){
+        try {
+            Bundle parametrosProductos= new Bundle();
+            parametrosProductos.putString("accion",accion);
+            parametrosProductos.putStringArray("datos", datos);
+
+            Intent agregarProducto = new Intent(getApplicationContext(), AgregarProducto.class);
+            agregarProducto.putExtras(parametrosProductos);
+            startActivity(agregarProducto);
+        }catch (Exception e){
+            mostrarMsgToast(e.getMessage());
+        }
+    }
+    private void obtenerDatosProducto(){
+        miBD = new DB(getApplicationContext(),"",null,1);
+        datosProdutoCursor = miBD.administracion_productos("consultar",null);
+        if( datosProdutoCursor.moveToFirst() ){//si hay productos que mostrar
+            mostarDatosProducto();
+        } else {//sino que llame para agregar nuevos productos...
+            mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
+            agregarProductos("nuevo", new String[]{});
+        }
 
     }
 

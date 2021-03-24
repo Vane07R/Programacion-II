@@ -39,8 +39,10 @@ public class DB extends SQLiteOpenHelper {
 
             case "nuevo":
                 sqLiteDatabaseW.execSQL("INSERT INTO tblproductos(nombre, descripcion, codigo, advertencias, precio, urlPhoto) VALUES ('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"')");
-
-
+                 break;
+            case "modificar":
+                sqLiteDatabaseW.execSQL("UPDATE tblproductos SET nombre='"+datos[1]+"',descripcion='"+datos[2]+"',codigo='"+datos[3]+"',Advertencia='"+datos[4]+"',precio='"+datos[5]+"',urlPhoto='"+datos[6]+"' WHERE idProduto='"+datos[0]+"'");
+                break;
         }
         return datosCursor;
 
