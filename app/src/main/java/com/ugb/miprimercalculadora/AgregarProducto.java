@@ -27,10 +27,11 @@ public class AgregarProducto extends AppCompatActivity {
     FloatingActionButton btnAtras;
     ImageView imgFotoProducto;
     Intent tomarFotoIntent;
-    String urlCompletaImg, idProducto, accion;
+    String urlCompletaImg, idProducto, accion="nuevo";
     Button btn;
     DB miBD;
     TextView tempVal;
+    
 
 
     @Override
@@ -68,13 +69,47 @@ public class AgregarProducto extends AppCompatActivity {
             String precio = tempVal.getText().toString();
 
             String[] datos = {idProducto,nombre,Descripcion,codigo, Advertencias, precio, urlCompletaImg};
-            miBD.administracion_productos("nuevo",datos);
+            miBD.administracion_productos(accion,datos);
             mostrarMsgToast("Producto guardado con exito.");
 
             mostrarVistaPrincipal();
 
         });
+        mostraDatosProducto();
 
+    }
+
+    private void mostraDatosProducto() {
+        try {
+            Bundle recibirParametros=getIntent().getExtras();
+            accion=recibirParametros.getString("accion");
+            if (accion.equals("modificar")){
+                String[] datos =recibirParametros.getStringArray("datos");
+
+                idProducto=datos[0];
+
+                tempVal=findViewById(R.id.txtNombre);
+                tempVal.setText(datos[1]);
+
+                tempVal=findViewById(R.id.txtTipoDeProducto);
+                tempVal.setText(datos[2]);
+
+                tempVal=findViewById(R.id.txtCodigo);
+                tempVal.setText(datos[3]);
+
+                tempVal=findViewById(R.id.txtAdvertencias);
+                tempVal.setText(datos[4]);
+
+                tempVal=findViewById(R.id.txtAPrecio);
+                tempVal.setText(datos[5]);
+
+                urlCompletaImg=datos[6];
+                Bitmap bitmap = BitmapFactory.decodeFile((urlCompletaImg));
+                imgFotoProducto.setImageBitmap(bitmap);
+            }
+        }catch (Exception e){
+            mostrarMsgToast(e.getMessage());
+        }
     }
 
     private void mostrarVistaPrincipal(){
