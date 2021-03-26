@@ -144,7 +144,7 @@ public class AgregarProducto extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
-            if (requestCode==1 && requestCode==RESULT_OK){
+            if (requestCode==1 && resultCode==RESULT_OK){
                 Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
                 imgFotoProducto.setImageBitmap(imageBitmap);
             }
