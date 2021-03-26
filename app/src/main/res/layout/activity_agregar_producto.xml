@@ -26,7 +26,7 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre"/>
+        android:hint="Marca"/>
 
     <EditText
         android:id="@+id/txtTipoDeProducto"
@@ -50,7 +50,7 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Advertencias"/>
+        android:hint="Presentación"/>
     <EditText
         android:id="@+id/txtAPrecio"
         android:layout_below="@id/txtAdvertencias"
