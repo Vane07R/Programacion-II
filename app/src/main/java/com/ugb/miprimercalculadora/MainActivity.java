@@ -99,7 +99,19 @@ public class MainActivity extends AppCompatActivity {
                     }else{//si esta buscando entonces filtramos los datos
                         for(productos am: productosArrayListCopy){
                             String nombre = am.getNombre();
-                            if(nombre.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
+                            String descripcion =am.getDescripcion();
+                            String codigo =am.getCodigo();
+                            String advertencias=am.getAdvertencias();
+                            String precio=am.getPrecio();
+
+                            String buscando =tempVal.getText().toString().trim().toLowerCase();
+
+                            if(nombre.toLowerCase().trim().contains(buscando) ||
+                                    descripcion.trim().toLowerCase().contains(buscando)||
+                                    codigo.trim().contains(buscando)||
+                                    advertencias.trim().toLowerCase().contains(buscando)||
+                                    precio.trim().contains(buscando)
+                            ){
                                 productosArrayList.add(am);
                             }
                         }
