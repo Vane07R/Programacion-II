@@ -1,8 +1,10 @@
 package com.ugb.miprimercalculadora;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        try {
        switch (item.getItemId()){
            case R.id.mnxAgregar:
                agregarProductos("nuevo",new String[]{});
@@ -77,9 +80,36 @@ public class MainActivity extends AppCompatActivity {
                };
                agregarProductos("modificar",datos);
                break;
-
+           case R.id.mnxEliminar:
+               eliminarProducto();
+               break;
        }
+    }catch (Exception ex){
+        mostrarMsgToast(ex.getMessage());
+    }
        return super.onContextItemSelected(item);
+    }
+
+    private void eliminarProducto() {
+        try {
+        AlertDialog.Builder confirmar =new AlertDialog.Builder(MainActivity.this);
+        confirmar.setTitle(datosProdutoCursor.getString(1));
+        confirmar.setMessage("Esta seguro de eliminar el registro");
+        confirmar.setPositiveButton("Si",  (dialog, which)-> {
+            miBD = new DB(getApplicationContext(), "", null, 1);
+            datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{datosProdutoCursor.getString(0)});
+            obtenerDatosProducto();
+            mostrarMsgToast("Registro Eliminado con exito...");
+            dialog.dismiss();
+        });
+        confirmar.setNegativeButton("no",(dialog, which)-> {
+            mostrarMsgToast("Eliminacion cancelada por el usuario");
+            dialog.dismiss();
+        });
+        confirmar.create().show();
+    }catch (Exception ex){
+        mostrarMsgToast(ex.getMessage());
+         }
     }
 
     private void buscarProductos(){
@@ -96,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     productosArrayList.clear();
                     if(tempVal.getText().toString().trim().length()<1 ){
                         productosArrayList.addAll(productosArrayListCopy);
-                    }else{//si esta buscando entonces filtramos los datos
+                    }else{
                         for(productos am: productosArrayListCopy){
                             String nombre = am.getNombre();
                             String descripcion =am.getDescripcion();
@@ -104,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                             String advertencias=am.getAdvertencias();
                             String precio=am.getPrecio();
 
-                            String buscando =tempVal.getText().toString().trim().toLowerCase();
+                            String buscando = tempVal.getText().toString().trim().toLowerCase();
 
                             if(nombre.toLowerCase().trim().contains(buscando) ||
                                     descripcion.trim().toLowerCase().contains(buscando)||
@@ -112,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                                     advertencias.trim().toLowerCase().contains(buscando)||
                                     precio.trim().contains(buscando)
                             ){
-                                productosArrayList.add(am);
+                                final boolean add = productosArrayList.add(am);
                             }
                         }
                     }
@@ -122,15 +152,11 @@ public class MainActivity extends AppCompatActivity {
                 }catch (Exception e){
                     mostrarMsgToast(e.getMessage());
                 }
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
-
     }
 
     private void agregarProductos(String accion,String[] datos){
@@ -146,12 +172,13 @@ public class MainActivity extends AppCompatActivity {
             mostrarMsgToast(e.getMessage());
         }
     }
+
     private void obtenerDatosProducto(){
         miBD = new DB(getApplicationContext(),"",null,1);
         datosProdutoCursor = miBD.administracion_productos("consultar",null);
         if( datosProdutoCursor.moveToFirst() ){//si hay productos que mostrar
             mostarDatosProducto();
-        } else {//sino que llame para agregar nuevos productos...
+        } else {
             mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
             agregarProductos("nuevo", new String[]{});
         }
@@ -173,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     datosProdutoCursor.getString(6) //urlPhoto
             );
 
-            productosArrayList.add(mis_productos);
+            boolean add = productosArrayList.add(mis_productos);
         }while (datosProdutoCursor.moveToNext());
         adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
         ltsProductos.setAdapter(adaptadorImagenes);
