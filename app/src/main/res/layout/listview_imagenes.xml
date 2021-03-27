@@ -20,10 +20,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="JUAN PEREZ"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/lblPrecio"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/lblTitulo"
+        android:layout_marginLeft="80dp"
+        android:text="$0.50"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
 
-
+    <TextView
+        android:id="@+id/lblPresentacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblPrecio"
+        android:layout_marginLeft="80dp"
+        android:text="Lata"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        />
 
 </RelativeLayout>
