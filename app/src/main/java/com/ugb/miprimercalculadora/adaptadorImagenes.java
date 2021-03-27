@@ -48,7 +48,6 @@ try {  misProductos = datosProductoArraylist.get(position);
     Bitmap imagenBitmap = BitmapFactory.decodeFile(misProductos.getUrlImag());
     imgViewView.setImageBitmap(imagenBitmap);
 
-
 }catch (Exception e){
 }
         return itemView;
