@@ -31,6 +31,7 @@ public class AgregarProducto extends AppCompatActivity {
     Button btn;
     DB miBD;
     TextView tempVal;
+    utilidades miURL;
     
 
 
