@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,9 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<productos>productosArrayList= new ArrayList<productos>();
     ArrayList<productos>productosArrayListCopy= new ArrayList<productos>();
     productos mis_productos;
+    utilidades miURL;
 
 
     @Override
@@ -185,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void mostarDatosProducto(){
         ltsProductos = findViewById(R.id.ltsAgregarProductos);
         productosArrayList.clear();
@@ -211,6 +217,21 @@ public class MainActivity extends AppCompatActivity {
     }
     private void mostrarMsgToast(String mgs){
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
+    }
+}
+class obtenerDatosServer extends AsyncTask<Void, Void, String>{
+    HttpURLConnection urlConnection;
+    @Override
+    protected String doInBackground(Void... voids) {
+        StringBuilder result = new StringBuilder();
+        try {
+            URL url = new URL(utilidades.urlServer);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.setRequestMethod("GET");
+        }catch (Exception e){
+            //
+        }
+        return null;
     }
 }
 class productos{
