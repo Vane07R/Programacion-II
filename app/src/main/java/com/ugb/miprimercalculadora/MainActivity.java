@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(v->{
            agregarProductos("nuevo",new String[]{});
         });
+        
         obtenerDatosProducto();
         buscarProductos();
 
