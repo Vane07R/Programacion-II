@@ -34,7 +34,7 @@ public class adaptadorImagenes extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        return Long.parseLong(datosProductoArraylist.get(position).idProducto);
+        return 0;//Long.parseLong(datosProductoArraylist.get(position).idProducto);
     }
 
     @Override

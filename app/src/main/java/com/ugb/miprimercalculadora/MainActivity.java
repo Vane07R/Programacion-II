@@ -25,6 +25,13 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.ScatteringByteChannel;
@@ -40,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<productos>productosArrayListCopy= new ArrayList<productos>();
     productos mis_productos;
     utilidades miURL;
+    JSONArray jsonArrayDatosProducto;
+    JSONObject jsonObjectDatosProducto;
+
 
 
     @Override
@@ -51,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(v->{
            agregarProductos("nuevo",new String[]{});
         });
+        
         obtenerDatosProducto();
         buscarProductos();
 
@@ -177,21 +188,71 @@ public class MainActivity extends AppCompatActivity {
             mostrarMsgToast(e.getMessage());
         }
     }
-
-    private void obtenerDatosProducto(){
+    private void obtenerDatosProductosOffline(){
         miBD = new DB(getApplicationContext(),"",null,1);
         datosProdutoCursor = miBD.administracion_productos("consultar",null);
         if( datosProdutoCursor.moveToFirst() ){//si hay productos que mostrar
-            mostarDatosProducto();
+            mostarDatosProductoOffLine();
         } else {
             mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
             agregarProductos("nuevo", new String[]{});
         }
+    }
+    private void obtenerDatosProductoOnLine(){
+        try {
+            ConexionServer conexionServer = new ConexionServer();
+            String resp = conexionServer.execute(utilidades.url_consulta, "GET").get();
+
+            jsonObjectDatosProducto = new JSONObject(resp);
+            jsonArrayDatosProducto = jsonObjectDatosProducto.getJSONArray("rows");
+            mostarDatosProductoOnLine();
+        }catch (Exception ex){
+            mostrarMsgToast(ex.getMessage());
+        }
+    }
+
+    private void obtenerDatosProducto(){
+        obtenerDatosProductoOnLine();
 
     }
 
+    private void mostarDatosProductoOnLine(){
+        try {
+            if (jsonArrayDatosProducto.length()>0){
+                ltsProductos = findViewById(R.id.ltsAgregarProductos);
+                productosArrayList.clear();
+                productosArrayListCopy.clear();
 
-    private void mostarDatosProducto(){
+                JSONObject jsonObject;
+                for (int i=0; i<jsonArrayDatosProducto.length();i++){
+                    jsonObject = jsonArrayDatosProducto.getJSONObject(i).getJSONObject("value");
+
+                    mis_productos = new productos(
+                            jsonObject.getString("_id"),
+                            jsonObject.getString("marca"),
+                            jsonObject.getString("descripcion"),
+                            jsonObject.getString("codigo de producto"),
+                            jsonObject.getString("presentacion"),
+                            jsonObject.getString("precio"),
+                            jsonObject.getString("urlPhoto")
+                    );
+                    productosArrayList.add(mis_productos);
+                }
+                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+                ltsProductos.setAdapter(adaptadorImagenes);
+
+                registerForContextMenu(ltsProductos);
+                productosArrayListCopy.addAll(productosArrayList);
+            }else
+                mostrarMsgToast("NO hay registro que mostar");
+            agregarProductos("nuevo", new String[]{});
+
+        }catch (Exception e){
+            mostrarMsgToast(e.getMessage());
+        }
+    }
+
+    private void mostarDatosProductoOffLine(){
         ltsProductos = findViewById(R.id.ltsAgregarProductos);
         productosArrayList.clear();
         productosArrayListCopy.clear();
@@ -218,23 +279,41 @@ public class MainActivity extends AppCompatActivity {
     private void mostrarMsgToast(String mgs){
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
     }
-}
-class obtenerDatosServer extends AsyncTask<Void, Void, String>{
-    HttpURLConnection urlConnection;
-    @Override
-    protected String doInBackground(Void... voids) {
-        StringBuilder result = new StringBuilder();
-        try {
-            URL url = new URL(utilidades.urlServer);
-            urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.setRequestMethod("GET");
-        }catch (Exception e){
-            //
+
+    private class ConexionServer extends AsyncTask<String, String, String> {
+        HttpURLConnection urlConnection;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
-        return null;
+
+        @Override
+        protected String doInBackground(String... parametros) {
+            StringBuilder result = new StringBuilder();
+            try {
+                String uri = parametros [0];
+                String metodo = parametros[1];
+                URL url = new URL(uri);
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestMethod(metodo);
+
+                InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String linea;
+                while ((linea=bufferedReader.readLine())!=null){
+                    result.append(linea);
+
+                }
+            }catch (Exception e){
+                //
+            }
+            return result.toString();
+        }
     }
 }
-class productos{
+
+    class   productos{
     String idProducto;
     String nombre;
     String Descripcion;
