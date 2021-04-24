@@ -46,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<productos>productosArrayList= new ArrayList<productos>();
     ArrayList<productos>productosArrayListCopy= new ArrayList<productos>();
     productos mis_productos;
-    utilidades miURL;
+    utilidades u;
     JSONArray jsonArrayDatosProducto;
     JSONObject jsonObjectDatosProducto;
+    detectarInternet di;
 
 
 
@@ -201,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
     private void obtenerDatosProductoOnLine(){
         try {
             ConexionServer conexionServer = new ConexionServer();
-            String resp = conexionServer.execute(utilidades.url_consulta, "GET").get();
+            //noinspection deprecation
+            String resp = conexionServer.execute(u.url_consulta, "GET").get();
 
             jsonObjectDatosProducto = new JSONObject(resp);
             jsonArrayDatosProducto = jsonObjectDatosProducto.getJSONArray("rows");
@@ -280,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
     }
 
+    @SuppressWarnings("deprecation")
     private class ConexionServer extends AsyncTask<String, String, String> {
         HttpURLConnection urlConnection;
 
