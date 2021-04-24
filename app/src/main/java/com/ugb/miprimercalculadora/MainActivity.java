@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
            position=adapterContextMenuInfo.position;
-            menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getString("nombre"));
+            menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getJSONObject("values").getString("nombre"));
         }catch (Exception e){
             mostrarMsgToast(e.getMessage());
         }
@@ -313,7 +314,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }catch (Exception e){
-                //
+
+                Log.i("GET",e.getMessage());
             }
             return result.toString();
         }
@@ -341,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
         this.UrlImag = UrlImag;
     }
 
-        public String getRev() {
+    public String getRev() {
             return rev;
         }
 

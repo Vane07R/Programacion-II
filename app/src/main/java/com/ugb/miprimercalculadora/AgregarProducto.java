@@ -94,6 +94,7 @@ public class AgregarProducto extends AppCompatActivity {
                 }
                 miBD.administracion_productos(accion, datos);
                 mostrarMsgToast("Producto guardado con exito.");
+
                 mostrarVistaPrincipal();
             }catch (Exception e){
                 mostrarMsgToast(e.getMessage());
@@ -111,7 +112,7 @@ public class AgregarProducto extends AppCompatActivity {
                 JSONObject datos = new JSONObject(recibirParametros.getString("datos")).getJSONObject("value");
 
                 idProducto=datos.getString("_id");
-                rev=datos.getString("rev");
+                rev=datos.getString("_rev");
 
                 tempVal=findViewById(R.id.txtNombre);
                 tempVal.setText(datos.getString("nombre"));
