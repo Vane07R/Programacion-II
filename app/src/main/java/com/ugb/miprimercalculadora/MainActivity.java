@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        di= new detectarInternet(getApplicationContext());
         btn=findViewById(R.id.btnAgregarProducto);
         btn.setOnClickListener(v->{
            agregarProductos("nuevo",new String[]{});
@@ -214,9 +214,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void obtenerDatosProducto(){
-        obtenerDatosProductoOnLine();
+        //si tengo internet obtener datos amigos online, sino, obtener datos amigos offline
+        if(di.hayConexionInternet()) {
+            mostrarMsgToask("Hay internet, mostrando datos de la nube");
+            obtenerDatosProductoOnLine();
+        } else {
+            jsonArrayDatosProducto = new JSONArray();
+            mostrarMsgToask("NO hay internet, mostrando datos local");
+            obtenerDatosProductosOffline();
+        }
 
     }
+
+
 
     private void mostarDatosProductoOnLine(){
         try {
@@ -231,10 +241,10 @@ public class MainActivity extends AppCompatActivity {
 
                     mis_productos = new productos(
                             jsonObject.getString("_id"),
-                            jsonObject.getString("marca"),
+                            jsonObject.getString("nombre"),
                             jsonObject.getString("descripcion"),
-                            jsonObject.getString("codigo de producto"),
-                            jsonObject.getString("presentacion"),
+                            jsonObject.getString("codigo"),
+                            jsonObject.getString("advertencias"),
                             jsonObject.getString("precio"),
                             jsonObject.getString("urlPhoto")
                     );
@@ -246,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 registerForContextMenu(ltsProductos);
                 productosArrayListCopy.addAll(productosArrayList);
             }else
-                mostrarMsgToast("NO hay registro que mostar");
+                mostrarMsgToast("No hay registro que mostar");
             agregarProductos("nuevo", new String[]{});
 
         }catch (Exception e){
