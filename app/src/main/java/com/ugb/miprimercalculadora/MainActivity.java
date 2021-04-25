@@ -1,6 +1,7 @@
 package com.ugb.miprimercalculadora;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
     JSONObject jsonObjectDatosProducto;
     detectarInternet di;
     int position=0;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(v->{
            agregarProductos("nuevo");
         });
-        
         obtenerDatosProducto();
         buscarProductos();
-
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -79,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
            position=adapterContextMenuInfo.position;
+
             menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getJSONObject("values").getString("nombre"));
         }catch (Exception e){
             mostrarMsgToast(e.getMessage());
@@ -105,20 +103,39 @@ public class MainActivity extends AppCompatActivity {
        return super.onContextItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void eliminarProducto() {
         try {
+            jsonObjectDatosProducto = jsonArrayDatosProducto.getJSONObject(position).getJSONObject("value");
         AlertDialog.Builder confirmar =new AlertDialog.Builder(MainActivity.this);
         confirmar.setTitle(datosProdutoCursor.getString(1));
         confirmar.setMessage("Esta seguro de eliminar el registro");
+        confirmar.setMessage(jsonObjectDatosProducto.getString("nombre"));
         confirmar.setPositiveButton("Si",  (dialog, which)-> {
-            miBD = new DB(getApplicationContext(), "", null, 1);
-            datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{datosProdutoCursor.getString(0)});
-            obtenerDatosProducto();
-            mostrarMsgToast("Registro Eliminado con exito...");
-            dialog.dismiss();
+            try {
+                if(di.hayConexionInternet()){
+                    ConexionServer objEliminarAmigo = new ConexionServer();
+                    String resp =  objEliminarAmigo.execute(u.url_mto +
+                            jsonObjectDatosProducto.getString("_id")+ "?rev="+
+                            jsonObjectDatosProducto.getString("_rev"), "DELETE"
+                    ).get();
+                    JSONObject jsonRespEliminar = new JSONObject(resp);
+                    if(jsonRespEliminar.getBoolean("ok")){
+                        jsonArrayDatosProducto.remove(position);
+                        mostarDatosProducto();
+                    }
+                }
+                miBD = new DB(getApplicationContext(), "", null, 1);
+                datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{datosProdutoCursor.getString(0)});
+                obtenerDatosProducto();
+                mostrarMsgToast("Registro Eliminado con exito...");
+                dialog.dismiss();
+            }catch (Exception e){
+                mostrarMsgToast(e.getMessage());
+            }
         });
         confirmar.setNegativeButton("no",(dialog, which)-> {
-            mostrarMsgToast("Eliminacion cancelada por el usuario");
+            mostrarMsgToast("Eliminacion cancelada por el usuario...");
             dialog.dismiss();
         });
         confirmar.create().show();
@@ -126,22 +143,19 @@ public class MainActivity extends AppCompatActivity {
         mostrarMsgToast(ex.getMessage());
          }
     }
-
     private void buscarProductos(){
         TextView tempVal =findViewById(R.id.txtBuscarProductos);
         tempVal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     productosArrayList.clear();
-                    if(tempVal.getText().toString().trim().length()<1 ){
+                    if(tempVal.getText().toString().trim().length()<1 ){//si no esta escribiendo, mostramos todos los registros
                         productosArrayList.addAll(productosArrayListCopy);
-                    }else{
+                    }else{//si esta buscando entonces filtramos los datos
                         for(productos am: productosArrayListCopy){
                             String nombre = am.getNombre();
                             String descripcion =am.getDescripcion();
@@ -157,13 +171,12 @@ public class MainActivity extends AppCompatActivity {
                                     advertencias.trim().toLowerCase().contains(buscando)||
                                     precio.trim().contains(buscando)
                             ){
-                                final boolean add = productosArrayList.add(am);
+                                productosArrayList.add(am);
                             }
                         }
                     }
                     adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
                     ltsProductos.setAdapter(adaptadorImagenes);
-
                 }catch (Exception e){
                     mostrarMsgToast(e.getMessage());
                 }
@@ -173,14 +186,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void agregarProductos(String accion){
         try {
-
             Bundle parametrosProductos= new Bundle();
             parametrosProductos.putString("accion",accion);
-            parametrosProductos.putString("datos",jsonArrayDatosProducto.getJSONObject(position).toString());
-
+            if(jsonArrayDatosProducto.length()>0){
+                parametrosProductos.putString("datos", jsonArrayDatosProducto.getJSONObject(position).toString() );
+            }
             Intent agregarProducto = new Intent(getApplicationContext(), AgregarProducto.class);
             agregarProducto.putExtras(parametrosProductos);
             startActivity(agregarProducto);
@@ -195,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
             if (datosProdutoCursor.moveToFirst()) {//si hay productos que mostrar
                 jsonObjectDatosProducto = new JSONObject();
                 JSONObject jsonValueObject = new JSONObject();
+                jsonArrayDatosProducto = new JSONArray();
                 do {
                     jsonObjectDatosProducto.put("_id", datosProdutoCursor.getString(0));//idProducto
                     jsonObjectDatosProducto.put("_rev", datosProdutoCursor.getString(0));//rev
@@ -205,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
                     jsonObjectDatosProducto.put("precio", datosProdutoCursor.getString(5));//precio
                     jsonObjectDatosProducto.put("UrlImag", datosProdutoCursor.getString(6));//urlPhoto
                     jsonValueObject.put("value", jsonObjectDatosProducto);
-                    jsonArrayDatosProducto.put(jsonValueObject);
 
+                    jsonArrayDatosProducto.put(jsonValueObject);
                 } while (datosProdutoCursor.moveToNext());
                 mostarDatosProducto();
             } else {
@@ -220,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
     private void obtenerDatosProductoOnLine(){
         try {
             ConexionServer conexionServer = new ConexionServer();
-
             String resp = conexionServer.execute(u.url_consulta, "GET").get();
 
             jsonObjectDatosProducto = new JSONObject(resp);
@@ -230,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
             mostrarMsgToast(ex.getMessage());
         }
     }
-
     private void obtenerDatosProducto(){
         //si tengo internet obtener datos amigos online, sino, obtener datos amigos offline
         if(di.hayConexionInternet()) {
@@ -241,11 +252,7 @@ public class MainActivity extends AppCompatActivity {
             mostrarMsgToast("NO hay internet, mostrando datos local");
             obtenerDatosProductosOffline();
         }
-
     }
-
-
-
     private void mostarDatosProducto(){
         try {
             if (jsonArrayDatosProducto.length()>0){
@@ -256,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonObject;
                 for (int i=0; i<jsonArrayDatosProducto.length();i++){
                     jsonObject = jsonArrayDatosProducto.getJSONObject(i).getJSONObject("value");
-
                     mis_productos = new productos(
                             jsonObject.getString("_id"),
                             jsonObject.getString("_rev"),
@@ -269,26 +275,22 @@ public class MainActivity extends AppCompatActivity {
                     );
                     productosArrayList.add(mis_productos);
                 }
-                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
+                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), productosArrayList);
                 ltsProductos.setAdapter(adaptadorImagenes);
-
                 registerForContextMenu(ltsProductos);
-
                 productosArrayListCopy.addAll(productosArrayList);
-            }else
-                mostrarMsgToast("No hay registro que mostar");
-            agregarProductos("nuevo");
 
+            }else {
+                mostrarMsgToast("No hay registro que mostar");
+                agregarProductos("nuevo");
+            }
         }catch (Exception e){
             mostrarMsgToast(e.getMessage());
         }
     }
-
     private void mostrarMsgToast(String mgs){
         Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
     }
-
-
     private class ConexionServer extends AsyncTask<String, String, String> {
         HttpURLConnection urlConnection;
 
@@ -311,10 +313,8 @@ public class MainActivity extends AppCompatActivity {
                 String linea;
                 while ((linea=bufferedReader.readLine())!=null){
                     result.append(linea);
-
                 }
             }catch (Exception e){
-
                 Log.i("GET",e.getMessage());
             }
             return result.toString();
@@ -346,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
     public String getRev() {
             return rev;
         }
-
         public void setRev(String rev) {
             this.rev = rev;
         }
