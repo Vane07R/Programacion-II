@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
            position=adapterContextMenuInfo.position;
 
-            menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getJSONObject("values").getString("nombre"));
+            menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getJSONObject("value").getString("nombre"));
         }catch (Exception e){
             mostrarMsgToast(e.getMessage());
         }
@@ -212,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
                     jsonObjectDatosProducto.put("_id", datosProdutoCursor.getString(0));//idProducto
                     jsonObjectDatosProducto.put("_rev", datosProdutoCursor.getString(0));//rev
                     jsonObjectDatosProducto.put("nombre", datosProdutoCursor.getString(1));//nombre
-                    jsonObjectDatosProducto.put("Descripcion", datosProdutoCursor.getString(2));//Descripcion
+                    jsonObjectDatosProducto.put("descripcion", datosProdutoCursor.getString(2));//Descripcion
                     jsonObjectDatosProducto.put("codigo", datosProdutoCursor.getString(3));//codigo
-                    jsonObjectDatosProducto.put("Advertencias", datosProdutoCursor.getString(4));//Advertencias
+                    jsonObjectDatosProducto.put("advertencias", datosProdutoCursor.getString(4));//Advertencias
                     jsonObjectDatosProducto.put("precio", datosProdutoCursor.getString(5));//precio
                     jsonObjectDatosProducto.put("UrlImag", datosProdutoCursor.getString(6));//urlPhoto
                     jsonValueObject.put("value", jsonObjectDatosProducto);
@@ -267,9 +267,9 @@ public class MainActivity extends AppCompatActivity {
                             jsonObject.getString("_id"),
                             jsonObject.getString("_rev"),
                             jsonObject.getString("nombre"),
-                            jsonObject.getString("Descripcion"),
+                            jsonObject.getString("descripcion"),
                             jsonObject.getString("codigo"),
-                            jsonObject.getString("Advertencias"),
+                            jsonObject.getString("advertencias"),
                             jsonObject.getString("precio"),
                             jsonObject.getString("urlPhoto")
                     );
@@ -326,9 +326,9 @@ public class MainActivity extends AppCompatActivity {
     String idProducto;
     String rev;
     String nombre;
-    String Descripcion;
+    String descripcion;
     String codigo;
-    String Advertencias;
+    String advertencias;
     String precio;
     String UrlImag;
 
@@ -336,9 +336,9 @@ public class MainActivity extends AppCompatActivity {
         this.idProducto = idProducto;
         this.rev = rev;
         this.nombre = nombre;
-        this.Descripcion = Descripcion;
+        this.descripcion = descripcion;
         this.codigo = codigo;
-        this.Advertencias = Advertencias;
+        this.advertencias = advertencias;
         this.precio = precio;
         this.UrlImag = UrlImag;
     }
@@ -367,11 +367,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getDescripcion() {
-        return Descripcion;
+        return descripcion;
     }
 
     public void setDescripcion(String Descripcion) {
-        this.Descripcion = Descripcion;
+        this.descripcion = descripcion;
     }
 
     public String getCodigo() {
@@ -383,12 +383,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getAdvertencias() {
-        return Advertencias;
+        return advertencias;
     }
 
-    public void setAdvertencias(String advertencias) {
-        this.Advertencias = Advertencias;
-    }
+    public void setAdvertencias(String advertencias) { this.advertencias = advertencias; }
 
     public String getPrecio() {
         return precio;

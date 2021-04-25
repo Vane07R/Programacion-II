@@ -75,9 +75,9 @@ public class AgregarProducto extends AppCompatActivity {
                   datosTienda.put("_rev",rev);
                 }
                 datosTienda.put("nombre",nombre);
-                datosTienda.put("Descripcion",Descripcion);
+                datosTienda.put("descripcion",Descripcion);
                 datosTienda.put("codigo",codigo);
-                datosTienda.put("Advertencias",Advertencias);
+                datosTienda.put("advertencias",Advertencias);
                 datosTienda.put("precio",precio);
                 datosTienda.put("urlCompletetaImg",urlCompletaImg);
                 String[] datos = {idProducto, nombre, Descripcion, codigo, Advertencias, precio, urlCompletaImg};
@@ -111,13 +111,13 @@ public class AgregarProducto extends AppCompatActivity {
                 tempVal.setText(datos.getString("nombre"));
 
                 tempVal=findViewById(R.id.txtTipoDeProducto);
-                tempVal.setText(datos.getString("Descripcion"));
+                tempVal.setText(datos.getString("descripcion"));
 
                 tempVal=findViewById(R.id.txtCodigo);
                 tempVal.setText(datos.getString("codigo"));
 
                 tempVal=findViewById(R.id.txtAdvertencias);
-                tempVal.setText(datos.getString("Advertencias"));
+                tempVal.setText(datos.getString("advertencias"));
 
                 tempVal=findViewById(R.id.txtAPrecio);
                 tempVal.setText(datos.getString("precio"));
