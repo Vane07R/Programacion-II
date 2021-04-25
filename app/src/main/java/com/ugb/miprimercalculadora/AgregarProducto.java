@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,11 +29,12 @@ public class AgregarProducto extends AppCompatActivity {
     FloatingActionButton btnAtras;
     ImageView imgFotoProducto;
     Intent tomarFotoIntent;
-    String urlCompletaImg, idProducto, accion="nuevo";
+    String urlCompletaImg, idProducto,rev, accion="nuevo";
     Button btn;
     DB miBD;
     TextView tempVal;
     utilidades miURL;
+    detectarInternet di;
     
 
 
@@ -54,27 +57,48 @@ public class AgregarProducto extends AppCompatActivity {
 
         btn = findViewById(R.id.btnGuardarProducto);
         btn.setOnClickListener(v ->{
-            tempVal = findViewById(R.id.txtNombre);
-            String nombre = tempVal.getText().toString();
+            try {
+                tempVal = findViewById(R.id.txtNombre);
+                String nombre = tempVal.getText().toString();
 
-            tempVal = findViewById(R.id.txtTipoDeProducto);
-            String Descripcion  = tempVal.getText().toString();
+                tempVal = findViewById(R.id.txtTipoDeProducto);
+                String Descripcion = tempVal.getText().toString();
 
-            tempVal = findViewById(R.id.txtCodigo);
-            String codigo = tempVal.getText().toString();
+                tempVal = findViewById(R.id.txtCodigo);
+                String codigo = tempVal.getText().toString();
 
-            tempVal = findViewById(R.id.txtAdvertencias);
-            String Advertencias = tempVal.getText().toString();
+                tempVal = findViewById(R.id.txtAdvertencias);
+                String Advertencias = tempVal.getText().toString();
 
-            tempVal = findViewById(R.id.txtAPrecio);
-            String precio = tempVal.getText().toString();
+                tempVal = findViewById(R.id.txtAPrecio);
+                String precio = tempVal.getText().toString();
 
-            String[] datos = {idProducto,nombre,Descripcion,codigo, Advertencias, precio, urlCompletaImg};
-            miBD.administracion_productos(accion,datos);
-            mostrarMsgToast("Producto guardado con exito.");
+                JSONObject datosTienda =new JSONObject();
+                if (accion.equals("modificar")&& idProducto.length()>0 && rev.length()>0){
 
-            mostrarVistaPrincipal();
+                  datosTienda.put("_id",idProducto);
+                  datosTienda.put("_rev",rev);
+                }
+                datosTienda.put("nombre",nombre);
+                datosTienda.put("Descripcion",Descripcion);
+                datosTienda.put("codigo",codigo);
+                datosTienda.put("Advertencias",Advertencias);
+                datosTienda.put("precio",precio);
+                datosTienda.put("urlCompletetaImg",urlCompletaImg);
+                String[] datos = {idProducto, nombre, Descripcion, codigo, Advertencias, precio, urlCompletaImg};
 
+                di = new detectarInternet(getApplicationContext());
+                if (di.hayConexionInternet()) {
+                    enviarDatosTienda objGuardarProducto = new enviarDatosTienda(getApplicationContext());
+                    String resp = objGuardarProducto.execute(datosTienda.toString()).get();
+                }
+                miBD.administracion_productos(accion, datos);
+                mostrarMsgToast("Producto guardado con exito.");
+
+                mostrarVistaPrincipal();
+            }catch (Exception e){
+                mostrarMsgToast(e.getMessage());
+            }
         });
         mostraDatosProducto();
 
@@ -85,26 +109,27 @@ public class AgregarProducto extends AppCompatActivity {
             Bundle recibirParametros=getIntent().getExtras();
             accion=recibirParametros.getString("accion");
             if (accion.equals("modificar")){
-                String[] datos =recibirParametros.getStringArray("datos");
+                JSONObject datos = new JSONObject(recibirParametros.getString("datos")).getJSONObject("value");
 
-                idProducto=datos[0];
+                idProducto=datos.getString("_id");
+                rev=datos.getString("_rev");
 
                 tempVal=findViewById(R.id.txtNombre);
-                tempVal.setText(datos[1]);
+                tempVal.setText(datos.getString("nombre"));
 
                 tempVal=findViewById(R.id.txtTipoDeProducto);
-                tempVal.setText(datos[2]);
+                tempVal.setText(datos.getString("Descripcion"));
 
                 tempVal=findViewById(R.id.txtCodigo);
-                tempVal.setText(datos[3]);
+                tempVal.setText(datos.getString("codigo"));
 
                 tempVal=findViewById(R.id.txtAdvertencias);
-                tempVal.setText(datos[4]);
+                tempVal.setText(datos.getString("Advertencias"));
 
                 tempVal=findViewById(R.id.txtAPrecio);
-                tempVal.setText(datos[5]);
+                tempVal.setText(datos.getString("precio"));
 
-                urlCompletaImg=datos[6];
+                urlCompletaImg=datos.getString("UrlImag");
                 Bitmap bitmap = BitmapFactory.decodeFile((urlCompletaImg));
                 imgFotoProducto.setImageBitmap(bitmap);
             }
