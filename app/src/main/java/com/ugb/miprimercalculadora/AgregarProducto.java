@@ -79,7 +79,7 @@ public class AgregarProducto extends AppCompatActivity {
                 datosTienda.put("codigo",codigo);
                 datosTienda.put("advertencias",Advertencias);
                 datosTienda.put("precio",precio);
-                datosTienda.put("urlCompletetaImg",urlCompletaImg);
+                datosTienda.put("urlPhoto",urlCompletaImg);
                 String[] datos = {idProducto, nombre, Descripcion, codigo, Advertencias, precio, urlCompletaImg};
 
                 di = new detectarInternet(getApplicationContext());
@@ -122,7 +122,7 @@ public class AgregarProducto extends AppCompatActivity {
                 tempVal=findViewById(R.id.txtAPrecio);
                 tempVal.setText(datos.getString("precio"));
 
-                urlCompletaImg=datos.getString("UrlImag");
+                urlCompletaImg=datos.getString("urlPhoto");
                 Bitmap bitmap = BitmapFactory.decodeFile((urlCompletaImg));
                 imgFotoProducto.setImageBitmap(bitmap);
             }
@@ -151,6 +151,7 @@ public class AgregarProducto extends AppCompatActivity {
                     startActivityForResult(tomarFotoIntent,1);
                 }catch (Exception e){
                     mostrarMsgToast(e.getMessage());
+
                 }
             } else {
                 mostrarMsgToast("No fue posible tomar la foto");

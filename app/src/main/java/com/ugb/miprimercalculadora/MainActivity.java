@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                     jsonObjectDatosProducto.put("codigo", datosProdutoCursor.getString(3));//codigo
                     jsonObjectDatosProducto.put("advertencias", datosProdutoCursor.getString(4));//Advertencias
                     jsonObjectDatosProducto.put("precio", datosProdutoCursor.getString(5));//precio
-                    jsonObjectDatosProducto.put("UrlImag", datosProdutoCursor.getString(6));//urlPhoto
+                    jsonObjectDatosProducto.put("urlPhoto", datosProdutoCursor.getString(6));//UrlImag
                     jsonValueObject.put("value", jsonObjectDatosProducto);
 
                     jsonArrayDatosProducto.put(jsonValueObject);
