@@ -13,21 +13,20 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@SuppressWarnings("deprecation")
 public class enviarDatosTienda  extends AsyncTask<String,String,String>{
     Context context;
     utilidades uc =new utilidades();
     String resp;
+
     public  enviarDatosTienda(Context context){
         this.context=context;
     }
-    HttpURLConnection urlConnection;
-
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
     }
-
+    HttpURLConnection urlConnection;
+    @Override
     protected String doInBackground(String... parametros){
         String jsonResponse = null;
         String jsonDatos= parametros[0];
@@ -59,18 +58,14 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
             while ( (line=bufferedReader.readLine())!=null ){
                 stringBuffer.append(line+"\n");
             }
-
             if( stringBuffer.length()==0 ){
                 return null;
             }
             jsonResponse = stringBuffer.toString();
             return jsonResponse;
-
         }catch (Exception e){
             Log.d("ENVIANDO", "ERROR: "+e.getMessage());
         }
         return null;
-
     }
-
 }

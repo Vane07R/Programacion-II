@@ -11,11 +11,13 @@ import androidx.annotation.Nullable;
 
 
 public class DB extends SQLiteOpenHelper {
+    Context miContext;
     static String nombreDB = "db_Tienda";
     static String tblProductos = "CREATE TABLE tblproductos (idproductos integer primary key autoincrement, nombre text, descripcion text, codigo text, advertencias text, precio text, urlPhoto text)";
 
     public DB(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, nombreDB, factory, version);
+        miContext=context;
     }
 
     @Override
@@ -47,7 +49,8 @@ public class DB extends SQLiteOpenHelper {
         }
         return datosCursor;
        } catch (Exception e){
-           return null;
+           Toast.makeText(miContext, "Error en la administracion de la BD "+ e.getMessage(), Toast.LENGTH_LONG).show();
+           return datosCursor;
        }
     }
 }

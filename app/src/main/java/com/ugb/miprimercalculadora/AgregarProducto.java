@@ -35,8 +35,6 @@ public class AgregarProducto extends AppCompatActivity {
     TextView tempVal;
     utilidades miURL;
     detectarInternet di;
-    
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +45,11 @@ public class AgregarProducto extends AppCompatActivity {
         btnAtras = findViewById(R.id.btnAtras);
         btnAtras.setOnClickListener(v-> {
             mostrarVistaPrincipal();
-
         });
-
         imgFotoProducto=findViewById(R.id.imgFotoProducto);
         imgFotoProducto.setOnClickListener(v ->{
             tomarFotoProducto();
         });
-
         btn = findViewById(R.id.btnGuardarProducto);
         btn.setOnClickListener(v ->{
             try {
@@ -101,9 +96,7 @@ public class AgregarProducto extends AppCompatActivity {
             }
         });
         mostraDatosProducto();
-
     }
-
     private void mostraDatosProducto() {
         try {
             Bundle recibirParametros=getIntent().getExtras();
@@ -142,16 +135,15 @@ public class AgregarProducto extends AppCompatActivity {
         Intent iprincipal = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(iprincipal);
     }
-
     private void tomarFotoProducto(){
         tomarFotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (tomarFotoIntent.resolveActivity(getPackageManager())!=null){
             File photoProducto = null;
-                            try {
-                                photoProducto = crearImagenProducto();
-                            }catch (Exception e){
-                                mostrarMsgToast(e.getMessage());
-                            }
+            try {
+                photoProducto = crearImagenProducto();
+            }catch (Exception e){
+                mostrarMsgToast(e.getMessage());
+            }
             if( photoProducto!=null ){
                 try{
                     Uri uriphotoProducto = FileProvider.getUriForFile(AgregarProducto.this, "com.ugb.miprimercalculadora.fileprovider",photoProducto);
@@ -165,7 +157,6 @@ public class AgregarProducto extends AppCompatActivity {
             }
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
