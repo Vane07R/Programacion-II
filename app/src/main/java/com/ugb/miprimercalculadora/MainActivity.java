@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     JSONObject jsonObjectDatosProducto;
     detectarInternet di;
     int position=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +104,14 @@ public class MainActivity extends AppCompatActivity {
        return super.onContextItemSelected(item);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void eliminarProducto() {
         try {
             jsonObjectDatosProducto = jsonArrayDatosProducto.getJSONObject(position).getJSONObject("value");
-        AlertDialog.Builder confirmar =new AlertDialog.Builder(MainActivity.this);
-        confirmar.setTitle(datosProdutoCursor.getString(1));
-        confirmar.setMessage("Esta seguro de eliminar el registro");
-        confirmar.setMessage(jsonObjectDatosProducto.getString("nombre"));
-        confirmar.setPositiveButton("Si",  (dialog, which)-> {
+           AlertDialog.Builder confirmar =new AlertDialog.Builder(MainActivity.this);
+           confirmar.setTitle(datosProdutoCursor.getString(1));
+           confirmar.setMessage("Esta seguro de eliminar el registro");
+           confirmar.setMessage(jsonObjectDatosProducto.getString("nombre"));
+           confirmar.setPositiveButton("Si",  (dialog, which)-> {
             try {
                 if(di.hayConexionInternet()){
                     ConexionServer objEliminarAmigo = new ConexionServer();
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 miBD = new DB(getApplicationContext(), "", null, 1);
-                datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{datosProdutoCursor.getString(0)});
+                datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{jsonObjectDatosProducto.getString("_id")});
                 obtenerDatosProducto();
                 mostrarMsgToast("Registro Eliminado con exito...");
                 dialog.dismiss();
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     private void agregarProductos(String accion){
         try {
             Bundle parametrosProductos= new Bundle();
-            parametrosProductos.putString("accion",accion);
+            parametrosProductos.putString("accion", accion);
             if(jsonArrayDatosProducto.length()>0){
                 parametrosProductos.putString("datos", jsonArrayDatosProducto.getJSONObject(position).toString() );
             }
@@ -294,9 +294,6 @@ public class MainActivity extends AppCompatActivity {
     private class ConexionServer extends AsyncTask<String, String, String> {
         HttpURLConnection urlConnection;
 
-        protected void onPosExecute(String s) {
-            super.onPostExecute(s);
-        }
 
         @Override
         protected String doInBackground(String... parametros) {
