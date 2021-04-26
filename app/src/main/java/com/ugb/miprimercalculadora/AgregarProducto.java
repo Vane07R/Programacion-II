@@ -57,13 +57,13 @@ public class AgregarProducto extends AppCompatActivity {
                 String nombre = tempVal.getText().toString();
 
                 tempVal = findViewById(R.id.txtTipoDeProducto);
-                String Descripcion = tempVal.getText().toString();
+                String descripcion = tempVal.getText().toString();
 
                 tempVal = findViewById(R.id.txtCodigo);
                 String codigo = tempVal.getText().toString();
 
                 tempVal = findViewById(R.id.txtAdvertencias);
-                String Advertencias = tempVal.getText().toString();
+                String advertencias = tempVal.getText().toString();
 
                 tempVal = findViewById(R.id.txtAPrecio);
                 String precio = tempVal.getText().toString();
@@ -75,12 +75,12 @@ public class AgregarProducto extends AppCompatActivity {
                   datosTienda.put("_rev",rev);
                 }
                 datosTienda.put("nombre",nombre);
-                datosTienda.put("descripcion",Descripcion);
+                datosTienda.put("descripcion",descripcion);
                 datosTienda.put("codigo",codigo);
-                datosTienda.put("advertencias",Advertencias);
+                datosTienda.put("advertencias",advertencias);
                 datosTienda.put("precio",precio);
                 datosTienda.put("urlPhoto",urlCompletaImg);
-                String[] datos = {idProducto, nombre, Descripcion, codigo, Advertencias, precio, urlCompletaImg};
+                String[] datos = {idProducto, nombre, descripcion, codigo, advertencias, precio, urlCompletaImg};
 
                 di = new detectarInternet(getApplicationContext());
                 if (di.hayConexionInternet()) {

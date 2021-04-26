@@ -14,17 +14,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class enviarDatosTienda  extends AsyncTask<String,String,String>{
+
     Context context;
     utilidades uc =new utilidades();
     String resp;
 
     public  enviarDatosTienda(Context context){
-        this.context=context;
+        this.context= context;
     }
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-    }
+        super.onPostExecute(s); }
+
     HttpURLConnection urlConnection;
     @Override
     protected String doInBackground(String... parametros){
@@ -33,7 +34,7 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
         BufferedReader bufferedReader;
 
         try {
-           URL url= new URL(uc.url_consulta);
+           URL url= new URL(uc.url_mto);
            urlConnection =(HttpURLConnection)url.openConnection();
            urlConnection.setDoInput(true);
            urlConnection.setDoInput(true);
@@ -42,7 +43,7 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
            urlConnection.setRequestProperty("Content-Type","aplication/json");
            urlConnection.setRequestProperty("Accept","aplication/json");
 
-            Writer writer=new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(),"UTP-8"));
+            Writer writer=new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(),"UTF-8"));
             writer.write(jsonDatos);
             writer.close();
 
@@ -65,6 +66,7 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
             return jsonResponse;
         }catch (Exception e){
             Log.d("ENVIANDO", "ERROR: "+e.getMessage());
+
         }
         return null;
     }
