@@ -100,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
-
-
+    
     private void Eliminar(){
         try {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder(MainActivity.this);
