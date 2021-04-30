@@ -31,6 +31,7 @@
         android:layout_below="@+id/lblTitulo"
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"
+        android:text="Duracion:"
         android:textSize="12sp"/>
 
     <TextView
@@ -40,6 +41,7 @@
         android:layout_below="@id/lblDuracion"
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"
+        android:text="Precio:"
         android:textSize="12sp"
         />
 

@@ -17,9 +17,9 @@ public class adaptadorImagenes  extends BaseAdapter {
     LayoutInflater layoutInflater;
     peliculasd misPeliculas;
 
-    public adaptadorImagenes(Context context, ArrayList<peliculasd> datospelisArrayList) {
+    public adaptadorImagenes(Context context, ArrayList<peliculasd> datospeliculasArrayList) {
         this.context = context;
-        this.datospeliculasArrayList = datospelisArrayList;
+        this.datospeliculasArrayList = datospeliculasArrayList;
     }
 
     @Override
@@ -46,17 +46,14 @@ public class adaptadorImagenes  extends BaseAdapter {
             temp.setText(misPeliculas.getTitulo());
 
             temp = encuadre.findViewById(R.id.lblDuracion);
-            temp.setText("$"+misPeliculas.getDuracion());
+            temp.setText("Duracion: " +misPeliculas.getDuracion() +" minutos ");
 
             temp = encuadre.findViewById(R.id.lblPrecio);
             temp.setText("$"+misPeliculas.getPrecio());
 
             String urldefoto = misPeliculas.getUrlfoto();
-
             img.setImageURI(Uri.parse(urldefoto));
 
-            //Bitmap imagenBitmap = BitmapFactory.decodeFile(misPeliculas.getUrlfoto());
-            //img.setImageBitmap(imagenBitmap);
         }catch (Exception e){
         }
         return encuadre;

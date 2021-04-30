@@ -30,7 +30,7 @@ public class DB extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabaseR = getReadableDatabase();
 
         switch (accion){
-            case "consultar":
+            case "Consultar":
                 datocursor = sqLiteDatabaseR.rawQuery("select * from tblpeliculas",null);
                 break;
 

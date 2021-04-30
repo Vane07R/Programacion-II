@@ -56,6 +56,7 @@ public class agregarpeliculas extends AppCompatActivity {
         btnregresar = findViewById(R.id.btnatras);
         btncargarvideo = findViewById(R.id.btncargarvideo);
         imgfotodepelicula1 = findViewById(R.id.imgfotopelicula1);
+
         vipelicula = findViewById(R.id.vipelicula);
         btnagregar = findViewById(R.id.btnguardarpelicula);
 
@@ -66,6 +67,7 @@ public class agregarpeliculas extends AppCompatActivity {
         imgfotodepelicula1.setOnClickListener(v -> {
             abrirgaleriaimagen();
         });
+
 
         btncargarvideo.setOnClickListener(v -> {
             abrirgaleriavideo();
@@ -169,7 +171,7 @@ public class agregarpeliculas extends AppCompatActivity {
             datospeliculas.put("duracion",duracion);
             datospeliculas.put("precio",precio);
             datospeliculas.put("urlfoto",urlfoto);
-            datospeliculas.put("urltriler",urlvideo);
+            datospeliculas.put("urltrailer",urlvideo);
 
             String[] datos = {idlocal, titulo, sinopsis, duracion, precio, urifoto, urlvideo };
 
@@ -216,6 +218,7 @@ public class agregarpeliculas extends AppCompatActivity {
                 temp.setText(datos.getString("precio"));
 
                 urlfoto =  datos.getString("urlfoto");
+
                 urlvideo =  datos.getString("urltrailer");
 
                 imgfotodepelicula1.setImageURI(Uri.parse(urifoto));
