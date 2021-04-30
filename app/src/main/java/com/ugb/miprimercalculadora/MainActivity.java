@@ -434,7 +434,7 @@ class peliculasd{
     public String getUrltrailer() {
         return urltrailer;
     }
-    
+
 
     public void setUrltrailer(String urltrailer) {
         this.urltrailer = urltrailer;
