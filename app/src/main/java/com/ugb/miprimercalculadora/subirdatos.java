@@ -13,37 +13,38 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class enviarDatosTienda  extends AsyncTask<String,String,String>{
-
+public class subirdatos extends AsyncTask<String, String, String> {
     Context context;
-    utilidades uc =new utilidades();
+    utilidades uc = new utilidades();
     String resp;
 
-    public  enviarDatosTienda(Context context){
-        this.context= context;
+    public subirdatos(Context context) {
+        this.context = context;
     }
+
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s); }
+        super.onPostExecute(s);
+    }
 
     HttpURLConnection urlConnection;
     @Override
-    protected String doInBackground(String... parametros){
+    protected String doInBackground(String... parametros) {
         String jsonResponse = null;
-        String jsonDatos= parametros[0];
+        String jsonDatos = parametros[0];
         BufferedReader bufferedReader;
 
-        try {
-           URL url= new URL(uc.url_mto);
-           urlConnection =(HttpURLConnection)url.openConnection();
-           urlConnection.setDoInput(true);
-           urlConnection.setDoInput(true);
+        try{
+            URL url = new URL(uc.url_mto);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
 
-           urlConnection.setRequestMethod("POST");
-           urlConnection.setRequestProperty("Content-Type","aplication/json");
-           urlConnection.setRequestProperty("Accept","aplication/json");
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setRequestProperty("Accept","application/json");
 
-            Writer writer=new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(),"UTF-8"));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(),"UTF-8"));
             writer.write(jsonDatos);
             writer.close();
 
@@ -51,12 +52,12 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
             if(inputStream==null){
                 return null;
             }
-            bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             resp = bufferedReader.toString();
 
             String line;
             StringBuffer stringBuffer = new StringBuffer();
-            while ( (line=bufferedReader.readLine())!=null ){
+            while ( (line = bufferedReader.readLine())!=null ){
                 stringBuffer.append(line+"\n");
             }
             if( stringBuffer.length()==0 ){
@@ -65,8 +66,7 @@ public class enviarDatosTienda  extends AsyncTask<String,String,String>{
             jsonResponse = stringBuffer.toString();
             return jsonResponse;
         }catch (Exception e){
-            Log.d("ENVIANDO", "ERROR: "+e.getMessage());
-
+            Log.d("Cargando datos", "Error: "+ e.getMessage());
         }
         return null;
     }

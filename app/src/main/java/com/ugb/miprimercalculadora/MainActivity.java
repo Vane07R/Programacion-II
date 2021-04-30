@@ -1,15 +1,11 @@
 package com.ugb.miprimercalculadora;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,15 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,269 +28,313 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton btn;
-    DB miBD;
-    ListView ltsProductos;
-    Cursor datosProdutoCursor = null;
-    ArrayList<productos>productosArrayList= new ArrayList<productos>();
-    ArrayList<productos>productosArrayListCopy= new ArrayList<productos>();
-    productos mis_productos;
+public class MainActivity extends AppCompatActivity {
+    FloatingActionButton btnadd;
+    DB miconexion;
+    ListView ltspeliculas;
+    Cursor datospeliculasdcursor = null;
+    ArrayList<peliculasd> peliculasdArrayList=new ArrayList<peliculasd>();
+    ArrayList<peliculasd> peliculasdArrayListCopy=new ArrayList<peliculasd>();
+    peliculasd misPeliculasd;
+    JSONArray jsonArrayDatosPeliculas;
+    JSONObject jsonObjectDatosPeliculas;
     utilidades u;
-    JSONArray jsonArrayDatosProducto;
-    JSONObject jsonObjectDatosProducto;
+    String idlocal;
     detectarInternet di;
-    int position=0;
+    int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        di= new detectarInternet(getApplicationContext());
-        btn=findViewById(R.id.btnAgregarProducto);
-        btn.setOnClickListener(v->{
-           agregarProductos("nuevo");
+        di = new detectarInternet(getApplicationContext());
+        btnadd = findViewById(R.id.btnagregar);
+        btnadd.setOnClickListener(v->{
+                Agregar("nuevo");
         });
-        obtenerDatosProducto();
-        buscarProductos();
+        obtenerDatos();
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu_productos,menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_productos, menu);
         try {
-
-            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-           position=adapterContextMenuInfo.position;
-
-            menu.setHeaderTitle(jsonArrayDatosProducto.getJSONObject(position).getJSONObject("value").getString("nombre"));
+            if(di.hayConexionInternet()) {
+                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                datospeliculasdcursor.moveToPosition(adapterContextMenuInfo.position);
+                position = adapterContextMenuInfo.position;
+                menu.setHeaderTitle(jsonArrayDatosPeliculas.getJSONObject(position).getJSONObject("value").getString("titulo"));
+            } else {
+                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)menuInfo;
+                datospeliculasdcursor.moveToPosition(adapterContextMenuInfo.position);
+                menu.setHeaderTitle(datospeliculasdcursor.getString(1));
+            }
+            idlocal = datospeliculasdcursor.getString(0);
         }catch (Exception e){
-            mostrarMsgToast(e.getMessage());
+            mensajes(e.getMessage());
+        }
+    }
+    @Override
+
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        try {
+            switch (item.getItemId()) {
+                case R.id.mnxAgregar:
+                    Agregar("nuevo");
+                    break;
+                case R.id.mnxModificar:
+                    Modificar ("modificar");
+                    break;
+                case R.id.mnxEliminar:
+                    Eliminar();
+                    break;
+            }
+        }catch (Exception ex){
+            mensajes(ex.getMessage());
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void Eliminar(){
+        try {
+            AlertDialog.Builder confirmacion = new AlertDialog.Builder(MainActivity.this);
+            confirmacion.setTitle("Esta seguro de eliminar?");
+            if (di.hayConexionInternet())
+            {
+                jsonObjectDatosPeliculas = jsonArrayDatosPeliculas.getJSONObject(position).getJSONObject("value");
+                confirmacion.setMessage(jsonObjectDatosPeliculas.getString("titulo"));
+            }else {
+                confirmacion.setMessage(datospeliculasdcursor.getString(1));
+            }
+
+            confirmacion.setPositiveButton("Si", (dialog, which) -> {
+
+                try {
+                    if(di.hayConexionInternet()){
+                        conexionserver objElimina = new conexionserver();
+                        String resp =  objElimina.execute(u.url_mto +
+                                jsonObjectDatosPeliculas.getString("_id")+ "?rev="+
+                                jsonObjectDatosPeliculas.getString("_rev"), "DELETE"
+                        ).get();
+                        JSONObject jsonRespEliminar = new JSONObject(resp);
+                        if(jsonRespEliminar.getBoolean("ok")){
+                            jsonArrayDatosPeliculas.remove(position);
+                            mostrarDatos();
+                        }
+                    }
+
+                    miconexion = new DB(getApplicationContext(), "", null, 1);
+                    datospeliculasdcursor = miconexion.eliminar("eliminar", datospeliculasdcursor.getString(0));
+                    obtenerDatos();
+                    mensajes("Registro eliminado");
+                    dialog.dismiss();
+                }catch (Exception e){
+                }
+            });
+            confirmacion.setNegativeButton("No", (dialog, which) -> {
+                mensajes("Eliminacion detendia");
+                dialog.dismiss();
+            });
+            confirmacion.create().show();
+        } catch (Exception ex){
+            mensajes(ex.getMessage());
         }
     }
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        try {
-       switch (item.getItemId()){
-           case R.id.mnxAgregar:
-               agregarProductos("nuevo");
-               break;
-           case R.id.mnxModificar:
-               agregarProductos("modificar");
-               break;
-           case R.id.mnxEliminar:
-               eliminarProducto();
-               break;
-       }
-    }catch (Exception ex){
-        mostrarMsgToast(ex.getMessage());
-    }
-       return super.onContextItemSelected(item);
-    }
-
-    private void eliminarProducto() {
-        try {
-            jsonObjectDatosProducto = jsonArrayDatosProducto.getJSONObject(position).getJSONObject("value");
-           AlertDialog.Builder confirmar =new AlertDialog.Builder(MainActivity.this);
-           confirmar.setTitle(datosProdutoCursor.getString(1));
-           confirmar.setMessage("Esta seguro de eliminar el registro");
-           confirmar.setMessage(jsonObjectDatosProducto.getString("nombre"));
-           confirmar.setPositiveButton("Si",  (dialog, which)-> {
-            try {
-                if(di.hayConexionInternet()){
-                    ConexionServer objEliminarAmigo = new ConexionServer();
-                    String resp =  objEliminarAmigo.execute(u.url_mto +
-                            jsonObjectDatosProducto.getString("_id")+ "?rev="+
-                            jsonObjectDatosProducto.getString("_rev"), "DELETE"
-                    ).get();
-                    JSONObject jsonRespEliminar = new JSONObject(resp);
-                    if(jsonRespEliminar.getBoolean("ok")){
-                        jsonArrayDatosProducto.remove(position);
-                        mostarDatosProducto();
-                    }
-                }
-                miBD = new DB(getApplicationContext(), "", null, 1);
-                datosProdutoCursor = miBD.administracion_productos("eliminar", new String[]{jsonObjectDatosProducto.getString("_id")});
-                obtenerDatosProducto();
-                mostrarMsgToast("Registro Eliminado con exito...");
-                dialog.dismiss();
-            }catch (Exception e){
-                mostrarMsgToast(e.getMessage());
-            }
-        });
-        confirmar.setNegativeButton("no",(dialog, which)-> {
-            mostrarMsgToast("Eliminacion cancelada por el usuario...");
-            dialog.dismiss();
-        });
-        confirmar.create().show();
-    }catch (Exception ex){
-        mostrarMsgToast(ex.getMessage());
-         }
-    }
-    private void buscarProductos(){
-        TextView tempVal =findViewById(R.id.txtBuscarProductos);
+    private void Buscar() {
+        TextView tempVal = findViewById(R.id.txtbuscar);
         tempVal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    productosArrayList.clear();
-                    if(tempVal.getText().toString().trim().length()<1 ){//si no esta escribiendo, mostramos todos los registros
-                        productosArrayList.addAll(productosArrayListCopy);
-                    }else{//si esta buscando entonces filtramos los datos
-                        for(productos am: productosArrayListCopy){
-                            String nombre = am.getNombre();
-                            String descripcion =am.getDescripcion();
-                            String codigo =am.getCodigo();
-                            String advertencias=am.getAdvertencias();
-                            String precio=am.getPrecio();
-
-                            String buscando = tempVal.getText().toString().trim().toLowerCase();
-
-                            if(nombre.toLowerCase().trim().contains(buscando) ||
-                                    descripcion.trim().toLowerCase().contains(buscando)||
-                                    codigo.trim().contains(buscando)||
-                                    advertencias.trim().toLowerCase().contains(buscando)||
-                                    precio.trim().contains(buscando)
-                            ){
-                                productosArrayList.add(am);
-                            }
+                peliculasdArrayList.clear();
+                if (tempVal.getText().toString().length()<1){
+                    peliculasdArrayList.addAll(peliculasdArrayListCopy);
+                } else{
+                    for (peliculasd B : peliculasdArrayListCopy){
+                        String titulo = B.getTitulo();
+                        String sinopsis = B.getSinopsis();
+                        String duracion = B.getDuracion();
+                        String precio = B.getPrecio();
+                        String buscando = tempVal.getText().toString().trim().toLowerCase();
+                        if(sinopsis.toLowerCase().contains(buscando) ||
+                                titulo.toLowerCase().contains(buscando) ||
+                                sinopsis.toLowerCase().contains(buscando) ||
+                                duracion.toLowerCase().contains(buscando) ||
+                                precio.toLowerCase().contains(buscando)){
+                            peliculasdArrayList.add(B);
                         }
                     }
-                    adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(),productosArrayList);
-                    ltsProductos.setAdapter(adaptadorImagenes);
-                }catch (Exception e){
-                    mostrarMsgToast(e.getMessage());
                 }
+                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), peliculasdArrayList);
+                ltspeliculas.setAdapter(adaptadorImagenes);
             }
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
     }
-    private void agregarProductos(String accion){
-        try {
-            Bundle parametrosProductos= new Bundle();
-            parametrosProductos.putString("accion", accion);
-            if(jsonArrayDatosProducto.length()>0){
-                parametrosProductos.putString("datos", jsonArrayDatosProducto.getJSONObject(position).toString() );
-            }
-            Intent agregarProducto = new Intent(getApplicationContext(), AgregarProducto.class);
-            agregarProducto.putExtras(parametrosProductos);
-            startActivity(agregarProducto);
-        }catch (Exception e){
-            mostrarMsgToast(e.getMessage());
-        }
-    }
-    private void obtenerDatosProductosOffline(){
-        try {
-            miBD = new DB(getApplicationContext(), "", null, 1);
-            datosProdutoCursor = miBD.administracion_productos("consultar", null);
-            if (datosProdutoCursor.moveToFirst()) {//si hay productos que mostrar
-                jsonObjectDatosProducto = new JSONObject();
-                JSONObject jsonValueObject = new JSONObject();
-                jsonArrayDatosProducto = new JSONArray();
-                do {
-                    jsonObjectDatosProducto.put("_id", datosProdutoCursor.getString(0));//idProducto
-                    jsonObjectDatosProducto.put("_rev", datosProdutoCursor.getString(0));//rev
-                    jsonObjectDatosProducto.put("nombre", datosProdutoCursor.getString(1));//nombre
-                    jsonObjectDatosProducto.put("descripcion", datosProdutoCursor.getString(2));//Descripcion
-                    jsonObjectDatosProducto.put("codigo", datosProdutoCursor.getString(3));//codigo
-                    jsonObjectDatosProducto.put("advertencias", datosProdutoCursor.getString(4));//Advertencias
-                    jsonObjectDatosProducto.put("precio", datosProdutoCursor.getString(5));//precio
-                    jsonObjectDatosProducto.put("urlPhoto", datosProdutoCursor.getString(6));//UrlImag
-                    jsonValueObject.put("value", jsonObjectDatosProducto);
 
-                    jsonArrayDatosProducto.put(jsonValueObject);
-                } while (datosProdutoCursor.moveToNext());
-                mostarDatosProducto();
-            } else {
-                mostrarMsgToast("No hay datos de productos que mostrar, por favor agregue nuevos productos...");
-                agregarProductos("nuevo");
-            }
-        }catch (Exception e){
-            mostrarMsgToast(e.getMessage());
-        }
-    }
-    private void obtenerDatosProductoOnLine(){
-        try {
-            ConexionServer conexionServer = new ConexionServer();
-            String resp = conexionServer.execute(u.url_consulta, "GET").get();
-
-            jsonObjectDatosProducto = new JSONObject(resp);
-            jsonArrayDatosProducto = jsonObjectDatosProducto.getJSONArray("rows");
-            mostarDatosProducto();
-        }catch (Exception ex){
-            mostrarMsgToast(ex.getMessage());
-        }
-    }
-    private void obtenerDatosProducto(){
-        //si tengo internet obtener datos amigos online, sino, obtener datos amigos offline
-        if(di.hayConexionInternet()) {
-            mostrarMsgToast("Hay internet, mostrando datos de la nube");
-            obtenerDatosProductoOnLine();
-        } else {
-            jsonArrayDatosProducto = new JSONArray();
-            mostrarMsgToast("NO hay internet, mostrando datos local");
-            obtenerDatosProductosOffline();
-        }
-    }
-    private void mostarDatosProducto(){
-        try {
-            if (jsonArrayDatosProducto.length()>0){
-                ltsProductos = findViewById(R.id.ltsAgregarProductos);
-                productosArrayList.clear();
-                productosArrayListCopy.clear();
-
-                JSONObject jsonObject;
-                for (int i=0; i<jsonArrayDatosProducto.length();i++){
-                    jsonObject = jsonArrayDatosProducto.getJSONObject(i).getJSONObject("value");
-                    mis_productos = new productos(
-                            jsonObject.getString("_id"),
-                            jsonObject.getString("_rev"),
-                            jsonObject.getString("nombre"),
-                            jsonObject.getString("descripcion"),
-                            jsonObject.getString("codigo"),
-                            jsonObject.getString("advertencias"),
-                            jsonObject.getString("precio"),
-                            jsonObject.getString("urlPhoto")
-                    );
-                    productosArrayList.add(mis_productos);
+    private void Modificar(String accion){
+        Bundle parametros = new Bundle();
+        parametros.putString("accion", accion);
+        parametros.putString("idlocal", idlocal);
+        jsonObjectDatosPeliculas = new JSONObject();
+        JSONObject jsonValueObject = new JSONObject();
+        if(di.hayConexionInternet())
+        {
+            try {
+                if(jsonArrayDatosPeliculas.length()>0){
+                    parametros.putString("datos", jsonArrayDatosPeliculas.getJSONObject(position).toString() );
                 }
-                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), productosArrayList);
-                ltsProductos.setAdapter(adaptadorImagenes);
-                registerForContextMenu(ltsProductos);
-                productosArrayListCopy.addAll(productosArrayList);
+            }catch (Exception e){
+                mensajes(e.getMessage());
+            }
+        }else{
+            try {
+                jsonArrayDatosPeliculas = new JSONArray();
+                jsonObjectDatosPeliculas.put("_id", datospeliculasdcursor.getString(0));
+                jsonObjectDatosPeliculas.put("_rev", datospeliculasdcursor.getString(0));
+                jsonObjectDatosPeliculas.put("titulo", datospeliculasdcursor.getString(1));
+                jsonObjectDatosPeliculas.put("sinopsis", datospeliculasdcursor.getString(2));
+                jsonObjectDatosPeliculas.put("duracion", datospeliculasdcursor.getString(3));
+                jsonObjectDatosPeliculas.put("precio", datospeliculasdcursor.getString(4));
+                jsonObjectDatosPeliculas.put("urlfoto", datospeliculasdcursor.getString(5));
+                jsonObjectDatosPeliculas.put("urltrailer", datospeliculasdcursor.getString(6));
+                jsonValueObject.put("value", jsonObjectDatosPeliculas);
+                jsonArrayDatosPeliculas.put(jsonValueObject);
+                if(jsonArrayDatosPeliculas.length()>0){
+                    parametros.putString("datos", jsonArrayDatosPeliculas.getJSONObject(position).toString() );
+                }
 
-            }else {
-                mostrarMsgToast("No hay registro que mostar");
-                agregarProductos("nuevo");
+            }catch (Exception e){
+                mensajes(e.getMessage());
+            }
+        }
+        Intent i = new Intent(getApplicationContext(), agregarpeliculas.class);
+        i.putExtras(parametros);
+        startActivity(i);
+    }
+
+    private void Agregar(String accion) {
+        Bundle parametros = new Bundle();
+        parametros.putString("accion", accion);
+        Intent i = new Intent(getApplicationContext(), agregarpeliculas.class);
+        i.putExtras(parametros);
+        startActivity(i);
+
+        }
+
+    private void obtenerDatosOffLine(){
+        try {
+            miconexion = new DB(getApplicationContext(), "", null, 1);
+            datospeliculasdcursor = miconexion.administracion_peliculas("Consultar", null);
+            if( datospeliculasdcursor.moveToFirst() ){
+                mostrarDatos();
+            } else {
+                mensajes("No hay datos registrados");
             }
         }catch (Exception e){
-            mostrarMsgToast(e.getMessage());
+            mensajes(e.getMessage());
         }
     }
-    private void mostrarMsgToast(String mgs){
-        Toast.makeText(getApplicationContext(),mgs,Toast.LENGTH_LONG).show();
+
+    private void obtenerDatosOnLine(){
+        try {
+            conexionserver conexionserver = new conexionserver();
+            String resp = conexionserver.execute(u.url_consulta, "GET").get();
+            jsonObjectDatosPeliculas=new JSONObject(resp);
+            jsonArrayDatosPeliculas = jsonObjectDatosPeliculas.getJSONArray("rows");
+            mostrarDatos();
+        }catch (Exception ex){
+            mensajes(ex.getMessage());
+        }
     }
-    private class ConexionServer extends AsyncTask<String, String, String> {
+
+    private void obtenerDatos(){
+        if(di.hayConexionInternet()) {
+            mensajes("Mostrando datos desde la nube");
+            obtenerDatosOnLine();
+            obtenerDatosOffLine();
+        } else {
+            mensajes("Mostrando datos locales");
+            obtenerDatosOffLine();
+        }
+    }
+
+    private void mostrarDatos(){
+        try{
+            ltspeliculas = findViewById(R.id.listpeliculas);
+            peliculasdArrayList.clear();
+            peliculasdArrayListCopy.clear();
+            JSONObject jsonObject;
+            if(di.hayConexionInternet()) {
+                if(jsonArrayDatosPeliculas.length()>0) {
+                    for (int i = 0; i < jsonArrayDatosPeliculas.length(); i++) {
+                        jsonObject = jsonArrayDatosPeliculas.getJSONObject(i).getJSONObject("value");
+                        misPeliculasd = new peliculasd(
+                                jsonObject.getString("_id"),
+                                jsonObject.getString("_rev"),
+                                jsonObject.getString("titulo"),
+                                jsonObject.getString("sinopsis"),
+                                jsonObject.getString("duracion"),
+                                jsonObject.getString("precio"),
+                                jsonObject.getString("urlfoto"),
+                                jsonObject.getString("urltrailer")
+                        );
+                        peliculasdArrayList.add(misPeliculasd);
+                    }}
+            } else {
+                do{
+                    misPeliculasd = new peliculasd(
+                            datospeliculasdcursor.getString(0),//
+                            datospeliculasdcursor.getString(1),//
+                            datospeliculasdcursor.getString(1),//
+                            datospeliculasdcursor.getString(2),//
+                            datospeliculasdcursor.getString(3),//
+                            datospeliculasdcursor.getString(4),//
+                            datospeliculasdcursor.getString(5), //
+                            datospeliculasdcursor.getString(6) //
+                    );
+                    peliculasdArrayList.add(misPeliculasd);
+                }while(datospeliculasdcursor.moveToNext());
+            }
+            adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), peliculasdArrayList);
+            ltspeliculas.setAdapter(adaptadorImagenes);
+            registerForContextMenu(ltspeliculas);
+            peliculasdArrayListCopy.addAll(peliculasdArrayList);
+
+        }catch (Exception e){
+            mensajes(e.getMessage());
+        }
+    }
+
+    private void mensajes(String msg){
+        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+    }
+
+    private class conexionserver extends AsyncTask<String, String, String> {
         HttpURLConnection urlConnection;
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
 
         @Override
         protected String doInBackground(String... parametros) {
             StringBuilder result = new StringBuilder();
-            try {
-                String uri = parametros [0];
+            try{
+                String uri = parametros[0];
                 String metodo = parametros[1];
                 URL url = new URL(uri);
                 urlConnection = (HttpURLConnection)url.openConnection();
@@ -308,82 +343,77 @@ public class MainActivity extends AppCompatActivity {
                 InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String linea;
-                while ((linea=bufferedReader.readLine())!=null){
+                while( (linea=bufferedReader.readLine())!=null ){
                     result.append(linea);
                 }
             }catch (Exception e){
-                Log.i("GET",e.getMessage());
+                Log.i("GET", e.getMessage());
             }
             return result.toString();
         }
     }
 }
 
-    class   productos{
-    String idProducto;
+class peliculasd{
+    String idpelicula;
     String rev;
-    String nombre;
-    String descripcion;
-    String codigo;
-    String advertencias;
+    String titulo;
+    String sinopsis;
+    String duracion;
     String precio;
-    String UrlImag;
+    String urlfoto;
+    String urltrailer;
 
-    public productos(String idProducto,String rev, String nombre, String Descripcion, String codigo, String Advertencias, String precio, String UrlImag) {
-        this.idProducto = idProducto;
+    public peliculasd(String idpelicula, String rev, String titulo, String sinopsis, String duracion, String precio, String urlfoto, String urltrailer) {
+        this.idpelicula = idpelicula;
         this.rev = rev;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.codigo = codigo;
-        this.advertencias = advertencias;
+        this.titulo = titulo;
+        this.sinopsis = sinopsis;
+        this.duracion = duracion;
         this.precio = precio;
-        this.UrlImag = UrlImag;
+        this.urlfoto = urlfoto;
+        this.urltrailer = urltrailer;
+    }
+
+    public String getIdpelicula() {
+        return idpelicula;
+    }
+
+    public void setIdpelicula(String idpelicula) {
+        this.idpelicula = idpelicula;
     }
 
     public String getRev() {
-            return rev;
-        }
-        public void setRev(String rev) {
-            this.rev = rev;
-        }
-
-        public String getIdProducto() {
-        return idProducto;
+        return rev;
     }
 
-    public void setIdProducto(String idProducto) {
-        this.idProducto = idProducto;
+    public void setRev(String rev) {
+        this.rev = rev;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getSinopsis() {
+        return sinopsis;
     }
 
-    public void setDescripcion(String Descripcion) {
-        this.descripcion = descripcion;
+    public void setSinopsis(String sinopsis) {
+        this.sinopsis = sinopsis;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getDuracion() {
+        return duracion;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
     }
-
-    public String getAdvertencias() {
-        return advertencias;
-    }
-
-    public void setAdvertencias(String advertencias) { this.advertencias = advertencias; }
 
     public String getPrecio() {
         return precio;
@@ -393,11 +423,20 @@ public class MainActivity extends AppCompatActivity {
         this.precio = precio;
     }
 
-    public String getUrlImag() {
-        return UrlImag;
+    public String getUrlfoto() {
+        return urlfoto;
     }
 
-    public void setUrlImg(String urlImg) {
-        this.UrlImag = UrlImag;
+    public void setUrlfoto(String urlfoto) {
+        this.urlfoto = urlfoto;
+    }
+
+    public String getUrltrailer() {
+        return urltrailer;
+    }
+    
+
+    public void setUrltrailer(String urltrailer) {
+        this.urltrailer = urltrailer;
     }
 }
