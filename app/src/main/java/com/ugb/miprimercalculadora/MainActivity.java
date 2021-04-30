@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 Agregar("nuevo");
         });
         obtenerDatos();
+        buscarPelicula();
     }
 
     @Override
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void Buscar() {
+    private void buscarPelicula() {
         TextView tempVal = findViewById(R.id.txtbuscar);
         tempVal.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,27 +157,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                peliculasdArrayList.clear();
-                if (tempVal.getText().toString().length()<1){
+                try {
+                    peliculasdArrayList.clear();
+                    if (tempVal.getText().toString().length()<1){//Si no esta escribiendo mostrar todos los rejistros
                     peliculasdArrayList.addAll(peliculasdArrayListCopy);
-                } else{
+                    } else{//si esta buescando biuscar los datos
                     for (peliculasd B : peliculasdArrayListCopy){
                         String titulo = B.getTitulo();
                         String sinopsis = B.getSinopsis();
-                        String duracion = B.getDuracion();
-                        String precio = B.getPrecio();
+
                         String buscando = tempVal.getText().toString().trim().toLowerCase();
-                        if(sinopsis.toLowerCase().contains(buscando) ||
-                                titulo.toLowerCase().contains(buscando) ||
-                                sinopsis.toLowerCase().contains(buscando) ||
-                                duracion.toLowerCase().contains(buscando) ||
-                                precio.toLowerCase().contains(buscando)){
+                        if(titulo.toLowerCase().contains(buscando) ||
+                                sinopsis.toLowerCase().contains(buscando)
+                        ){
                             peliculasdArrayList.add(B);
                         }
                     }
                 }
-                adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), peliculasdArrayList);
-                ltspeliculas.setAdapter(adaptadorImagenes);
+                    adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), peliculasdArrayList);
+                    ltspeliculas.setAdapter(adaptadorImagenes);
+                }catch (Exception e){
+                    mensajes(e.getMessage());
+                }
+
+
+
             }
             @Override
             public void afterTextChanged(Editable s) {
