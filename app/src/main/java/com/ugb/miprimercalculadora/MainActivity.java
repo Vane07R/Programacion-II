@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
-    
+
     private void Eliminar(){
         try {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder(MainActivity.this);
@@ -434,6 +434,7 @@ class peliculasd{
     public String getUrltrailer() {
         return urltrailer;
     }
+    
 
     public void setUrltrailer(String urltrailer) {
         this.urltrailer = urltrailer;
