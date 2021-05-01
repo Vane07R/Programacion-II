@@ -160,20 +160,20 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     peliculasdArrayList.clear();
                     if (tempVal.getText().toString().length()<1){//Si no esta escribiendo mostrar todos los rejistros
-                    peliculasdArrayList.addAll(peliculasdArrayListCopy);
+                        peliculasdArrayList.addAll(peliculasdArrayListCopy);
                     } else{//si esta buescando biuscar los datos
-                    for (peliculasd B : peliculasdArrayListCopy){
-                        String titulo = B.getTitulo();
-                        String sinopsis = B.getSinopsis();
+                        for (peliculasd B : peliculasdArrayListCopy){
+                            String titulo = B.getTitulo();
+                            String sinopsis = B.getSinopsis();
 
-                        String buscando = tempVal.getText().toString().trim().toLowerCase();
-                        if(titulo.toLowerCase().contains(buscando) ||
-                                sinopsis.toLowerCase().contains(buscando)
-                        ){
-                            peliculasdArrayList.add(B);
+                            String buscando = tempVal.getText().toString().trim().toLowerCase();
+                            if(titulo.toLowerCase().contains(buscando) ||
+                                    sinopsis.toLowerCase().contains(buscando)
+                            ){
+                                peliculasdArrayList.add(B);
+                            }
                         }
                     }
-                }
                     adaptadorImagenes adaptadorImagenes = new adaptadorImagenes(getApplicationContext(), peliculasdArrayList);
                     ltspeliculas.setAdapter(adaptadorImagenes);
                 }catch (Exception e){
@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void Modificar(String accion){
         Bundle parametros = new Bundle();
