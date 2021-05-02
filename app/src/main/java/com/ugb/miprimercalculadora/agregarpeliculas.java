@@ -34,7 +34,7 @@ import org.json.JSONObject;
 public class agregarpeliculas extends AppCompatActivity {
 
     FloatingActionButton btnregresar;
-    ImageView imgfotodepelicula1;
+    ImageView imgfotodepelicula;
     VideoView vipelicula ;
     Intent tomarfotointent;
     String urlfoto, urlvideo;
@@ -61,7 +61,7 @@ public class agregarpeliculas extends AppCompatActivity {
 
         btnregresar = findViewById(R.id.btnatras);
         btncargarvideo = findViewById(R.id.btncargarvideo);
-        imgfotodepelicula1 = findViewById(R.id.imgfotopelicula1);
+        imgfotodepelicula = findViewById(R.id.imgfotopelicula1);
 
         vipelicula = findViewById(R.id.vipelicula);
         btnagregar = findViewById(R.id.btnguardarpelicula);
@@ -70,7 +70,7 @@ public class agregarpeliculas extends AppCompatActivity {
             regresarmainactivity();
         });
 
-        imgfotodepelicula1.setOnClickListener(v -> {
+        imgfotodepelicula.setOnClickListener(v -> {
             abrirgaleriaimagen();
         });
 
@@ -87,6 +87,7 @@ public class agregarpeliculas extends AppCompatActivity {
 
         permisos();
         mostrardatospelicula();
+        controles();
 
         MediaController mediaController = new MediaController(this);
         vipelicula.setMediaController(mediaController);
@@ -104,25 +105,6 @@ public class agregarpeliculas extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent dataimagen) {
-
-        if (resultCode == Activity.RESULT_OK && dataimagen != null) {
-
-            if (requestCode == RIG) {
-                Uri photo = dataimagen.getData();
-                imgfotodepelicula1.setImageURI(photo);
-                urlfoto = photo.toString();
-            }else if (requestCode == RVD){
-                Uri video = dataimagen.getData();
-                vipelicula.setVideoURI(video);
-                urlvideo = video.toString();
-            }
-
-        }
-
-        super.onActivityResult(requestCode, resultCode, dataimagen);
-    }
 
     private void abrirgaleriaimagen(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT );
@@ -180,7 +162,7 @@ public class agregarpeliculas extends AppCompatActivity {
             datospeliculas.put("urlfoto",urlfoto);
             datospeliculas.put("urltrailer",urlvideo);
 
-            String[] datos = {idlocal, titulo, sinopsis, duracion, precio, urifoto, urlvideo };
+            String[] datos = {idlocal, titulo, sinopsis, duracion, precio, urlfoto, urlvideo };
 
             di = new detectarInternet(getApplicationContext());
             if (di.hayConexionInternet()) {
@@ -228,8 +210,8 @@ public class agregarpeliculas extends AppCompatActivity {
 
                 urlvideo =  datos.getString("urltrailer");
 
-                imgfotodepelicula1.setImageURI(Uri.parse(urifoto));
-                vipelicula.setVideoURI(Uri.parse(urivideo));
+                imgfotodepelicula.setImageURI(Uri.parse(urlfoto));
+                vipelicula.setVideoURI(Uri.parse(urlvideo));
 
             }
         }catch (Exception ex){
@@ -239,6 +221,13 @@ public class agregarpeliculas extends AppCompatActivity {
 
     private void mensajes(String msg){
         Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
+
+    }
+
+    private void controles(){
+        MediaController mediaController = new MediaController(this);
+        vipelicula.setMediaController(mediaController);
+        mediaController.setAnchorView(vipelicula);
     }
 
     public static String getRealUrl(final Context context, final Uri uri) {
@@ -288,6 +277,26 @@ public class agregarpeliculas extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent dataimagen) {
+        if (resultCode == Activity.RESULT_OK && dataimagen != null) {
+            if (requestCode == RIG) {
+                Uri photo = dataimagen.getData();
+                imgfotodepelicula.setImageURI(photo);
+
+                urlfoto = getRealUrl(this,photo);
+
+
+            }else if (requestCode == RVD){
+                Uri video = dataimagen.getData();
+                vipelicula.setVideoURI(video);
+
+                urlvideo = getRealUrl(this,video);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, dataimagen);
     }
 
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
