@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
+
 public class DB extends SQLiteOpenHelper {
     static String nombre_bd = "DB_Peliculas";
     static String tblpeliculas = "CREATE TABLE tblpeliculas (idpelicula integer primary key autoincrement, titulo text, sipnosis text, duracion text, precio text, urlfoto text, urlvideo text)";

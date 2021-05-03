@@ -13,6 +13,11 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
+
 public class subirdatos extends AsyncTask<String, String, String> {
     Context context;
     utilidades uc = new utilidades();

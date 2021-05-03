@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
 
 public class adaptadorImagenes  extends BaseAdapter {
     Context context;
@@ -41,6 +45,7 @@ public class adaptadorImagenes  extends BaseAdapter {
         View encuadre = layoutInflater.inflate(R.layout.listview_imagenes, parent, false);
         TextView temp = encuadre.findViewById(R.id.lblTitulo);
         ImageView img = encuadre.findViewById(R.id.ImgPhoto);
+
         try{
             misPeliculas = datospeliculasArrayList.get(position);
             temp.setText(misPeliculas.getTitulo());
@@ -52,7 +57,7 @@ public class adaptadorImagenes  extends BaseAdapter {
             temp.setText("$"+misPeliculas.getPrecio());
 
             String urlfoto = misPeliculas.getUrlfoto();
-            //img.setImageURI(Uri.parse(urlfoto));
+            img.setImageURI(Uri.parse(urlfoto));
 
         }catch (Exception e){
         }
