@@ -30,8 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity     {
     FloatingActionButton btnadd;
     DB miconexion;
     ListView ltspeliculas;
@@ -118,11 +117,12 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     if(di.hayConexionInternet()){
-                        conexionserver objElimina = new conexionserver();
-                        String resp =  objElimina.execute(u.url_mto +
+                        conexionserver objEliminar = new conexionserver();
+                        String resp =  objEliminar.execute(u.url_mto +
                                 jsonObjectDatosPeliculas.getString("_id")+ "?rev="+
                                 jsonObjectDatosPeliculas.getString("_rev"), "DELETE"
                         ).get();
+
                         JSONObject jsonRespEliminar = new JSONObject(resp);
                         if(jsonRespEliminar.getBoolean("ok")){
                             jsonArrayDatosPeliculas.remove(position);
@@ -302,14 +302,14 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 do{
                     misPeliculasd = new peliculasd(
-                            datospeliculasdcursor.getString(0),//
-                            datospeliculasdcursor.getString(1),//
-                            datospeliculasdcursor.getString(1),//
-                            datospeliculasdcursor.getString(2),//
-                            datospeliculasdcursor.getString(3),//
-                            datospeliculasdcursor.getString(4),//
-                            datospeliculasdcursor.getString(5), //
-                            datospeliculasdcursor.getString(6) //
+                            datospeliculasdcursor.getString(0),
+                            datospeliculasdcursor.getString(1),
+                            datospeliculasdcursor.getString(1),
+                            datospeliculasdcursor.getString(2),
+                            datospeliculasdcursor.getString(3),
+                            datospeliculasdcursor.getString(4),
+                            datospeliculasdcursor.getString(5),
+                            datospeliculasdcursor.getString(6)
                     );
                     peliculasdArrayList.add(misPeliculasd);
                 }while(datospeliculasdcursor.moveToNext());

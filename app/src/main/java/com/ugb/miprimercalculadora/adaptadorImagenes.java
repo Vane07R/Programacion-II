@@ -37,7 +37,7 @@ public class adaptadorImagenes  extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        layoutInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View encuadre = layoutInflater.inflate(R.layout.listview_imagenes, parent, false);
         TextView temp = encuadre.findViewById(R.id.lblTitulo);
         ImageView img = encuadre.findViewById(R.id.ImgPhoto);
@@ -51,11 +51,12 @@ public class adaptadorImagenes  extends BaseAdapter {
             temp = encuadre.findViewById(R.id.lblPrecio);
             temp.setText("$"+misPeliculas.getPrecio());
 
-            String urldefoto = misPeliculas.getUrlfoto();
-            img.setImageURI(Uri.parse(urldefoto));
+            String urlfoto = misPeliculas.getUrlfoto();
+            //img.setImageURI(Uri.parse(urlfoto));
 
         }catch (Exception e){
         }
         return encuadre;
     }
 }
+
