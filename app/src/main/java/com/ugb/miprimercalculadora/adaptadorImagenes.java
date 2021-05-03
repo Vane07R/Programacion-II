@@ -59,3 +59,4 @@ public class adaptadorImagenes  extends BaseAdapter {
         return encuadre;
     }
 }
+

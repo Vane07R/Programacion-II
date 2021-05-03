@@ -34,16 +34,16 @@ import org.json.JSONObject;
 public class agregarpeliculas extends AppCompatActivity {
 
     FloatingActionButton btnregresar;
-    ImageView imgfotodepelicula;
+    ImageView imgfotodepelicula, imgfotodepelicula2;
     VideoView vipelicula ;
     Intent tomarfotointent;
-    String urlfoto, urlvideo;
+    String urlfoto,urlfoto2, urlvideo;
     String idpelicula,idlocal, accion = "nuevo", rev;
     Button btnagregar, btncargarvideo;
     DB miconexion;
     TextView temp;
     utilidades miUrl;
-    String urifoto, urivideo;
+    String urifoto, urifoto2, urivideo;
     detectarInternet di;
     
     private static final int RPQ= 100;
@@ -62,6 +62,8 @@ public class agregarpeliculas extends AppCompatActivity {
         btnregresar = findViewById(R.id.btnatras);
         btncargarvideo = findViewById(R.id.btncargarvideo);
         imgfotodepelicula = findViewById(R.id.imgfotopelicula1);
+       // imgfotodepelicula = findViewById(R.id.imgfotopelicula2);
+
 
         vipelicula = findViewById(R.id.vipelicula);
         btnagregar = findViewById(R.id.btnguardarpelicula);
@@ -73,6 +75,10 @@ public class agregarpeliculas extends AppCompatActivity {
         imgfotodepelicula.setOnClickListener(v -> {
             abrirgaleriaimagen();
         });
+
+        //  imgfotodepelicula2.setOnClickListener(v -> {
+        //    abrirgaleriaimagen();
+        // });
 
 
         btncargarvideo.setOnClickListener(v -> {
@@ -160,6 +166,7 @@ public class agregarpeliculas extends AppCompatActivity {
             datospeliculas.put("duracion",duracion);
             datospeliculas.put("precio",precio);
             datospeliculas.put("urlfoto",urlfoto);
+
             datospeliculas.put("urltrailer",urlvideo);
 
             String[] datos = {idlocal, titulo, sinopsis, duracion, precio, urlfoto, urlvideo };

@@ -31,19 +31,21 @@
 
                 <ImageButton
                     android:id="@+id/imgfotopelicula1"
-                    android:layout_width="160dp"
-                    android:layout_height="136dp"
+                    android:layout_width="145dp"
+                    android:layout_height="108dp"
+                    android:layout_marginTop="15dp"
                     android:layout_below="@+id/vipelicula"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp" />
+                     />
 
                 <ImageButton
                     android:id="@+id/imgfotopelicula2"
-                    android:layout_width="160dp"
-                    android:layout_height="136dp"
+                    android:layout_width="145dp"
+                    android:layout_height="108dp"
+                    android:layout_marginTop="15dp"
                     android:layout_below="@+id/vipelicula"
                     android:layout_marginLeft="220dp"
-                    android:layout_marginTop="5dp" />
+                     />
 
             </androidx.cardview.widget.CardView>
 
