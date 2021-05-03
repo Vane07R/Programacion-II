@@ -4,6 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
+
 public class  detectarInternet {
     private Context context;
 

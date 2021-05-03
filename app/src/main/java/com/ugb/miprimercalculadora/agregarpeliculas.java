@@ -31,6 +31,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
+
 public class agregarpeliculas extends AppCompatActivity {
 
     FloatingActionButton btnregresar;
@@ -62,7 +67,6 @@ public class agregarpeliculas extends AppCompatActivity {
         btnregresar = findViewById(R.id.btnatras);
         btncargarvideo = findViewById(R.id.btncargarvideo);
         imgfotodepelicula = findViewById(R.id.imgfotopelicula1);
-       // imgfotodepelicula = findViewById(R.id.imgfotopelicula2);
 
 
         vipelicula = findViewById(R.id.vipelicula);
@@ -176,7 +180,6 @@ public class agregarpeliculas extends AppCompatActivity {
                 subirdatos guardarpelicula = new subirdatos(getApplicationContext());
                 String resp = guardarpelicula.execute(datospeliculas.toString()).get();
             }
-
             miconexion.administracion_peliculas(accion, datos);
             mensajes("Registro guardado con exito.");
 

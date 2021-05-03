@@ -30,6 +30,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+//Allison Vanessa Rodriguez Sosa
+//Flor Mabel Contreras Rodriguez
+//Roger Alberto Chávez Zelaya
+//Elmer Antonio Angel Reyes
+
 public class MainActivity extends AppCompatActivity     {
     FloatingActionButton btnadd;
     DB miconexion;
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity     {
         });
         obtenerDatos();
         buscarPelicula();
+        //sincronizar();
     }
 
     @Override
@@ -188,7 +194,6 @@ public class MainActivity extends AppCompatActivity     {
             }
         });
     }
-
 
     private void Modificar(String accion){
         Bundle parametros = new Bundle();
