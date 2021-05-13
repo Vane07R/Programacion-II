@@ -26,28 +26,24 @@ TextView nombre;
         btnMostrar.setOnClickListener(this);
         btnSalir.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
-      switch (v.getId()){
-          case R.id.btnEditar:
-              Intent c=new Intent(InicioActivity.this,.class);
-              startActivity(i2);
-              finish();
-              break;
-          case R.id.btnEliminar:
-              break;
-          case R.id.btnMostar:
-              Intent i2=new Intent(InicioActivity.this,Mostrar.class);
-              startActivity(i2);
-              finish();
-              break;
-          case R.id.btnSalir:
-              Intent i2=new Intent(InicioActivity.this,MainActivity.class);
-              startActivity(i2);
-              finish();
-              break;
-      }
+        switch (v.getId()){
+            case R.id.btnEditar:
+
+                break;
+            case R.id.btnEliminar:
+                break;
+            case R.id.btnMostar:
+
+                break;
+            case R.id.btnSalir:
+                Intent i2=new Intent(InicioActivity.this,MainActivity.class);
+                startActivity(i2);
+                finish();
+                break;
+        }
     }
+
 
 }
