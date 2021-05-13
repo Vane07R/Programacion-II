@@ -12,7 +12,7 @@ public class daoUsuario {
     ArrayList<Usuario> lista;
     SQLiteDatabase sql;
     String bd="BDUsuarios";
-    String tabla="create table usuario(id integer primary key autoincrement,usuario text, pass text, nombre text,ap text)";
+    String tabla="create table if not exists usuario(id integer primary key autoincrement,usuario text, pass text, nombre text,ap text)";
 
     public daoUsuario(Context c){
         this.c=c;
@@ -61,6 +61,37 @@ public class daoUsuario {
             }while (cr.moveToNext());
         }
         return lista;
+    }
+    public  int login(String u,String p){
+        int a=0;
+        Cursor cr=sql.rawQuery("select * from usuario",null);
+        if(cr!=null&&cr.moveToFirst()){
+            do{
+                if(cr.getString(1).equals(u)&&cr.getString(2).equals(p)){
+                    a++;
+                }
+            }while (cr.moveToNext());
+        }
+        return  a;
+
+    }
+    public Usuario getUsuario(String u,String p){
+        lista=selectUsaruario();
+        for (Usuario us:lista){
+            if(us.getUsuario().equals(u)&&us.getPassword().equals(p)){
+                return us;
+            }
+        }
+        return null;
+    }
+    public Usuario getUsuarioById(int id){
+        lista=selectUsaruario();
+        for (Usuario us:lista){
+            if(us.getId()==id){
+                return us;
+            }
+        }
+        return null;
     }
 
 }
