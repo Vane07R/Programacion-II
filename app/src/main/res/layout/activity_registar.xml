@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="CREAR NUEVO USUARIO"
+        android:textColor="#020202" />
+
+    <EditText
+        android:id="@+id/Rnombre"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Nombre"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/Rapellidos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Apellidos"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/Rtelefono"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Teléfono"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/RCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Correo "
+        android:inputType="textEmailAddress"/>
+    <EditText
+        android:id="@+id/RProfesion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Profesión"
+        android:inputType="textEmailAddress"/>
+    <EditText
+        android:id="@+id/Ruser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Nombre de usuario"
+        android:inputType="textEmailAddress"/>
+    <EditText
+        android:id="@+id/Rcontraseña"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="Contraseña"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/btnRRegistrar"
+        android:layout_width="399dp"
+        android:layout_height="match_parent"
+        android:layout_margin="9dp"
+        android:layout_weight="1"
+        android:background="#0099FF"
+        android:text="Registrar"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        app:backgroundTint="#476129" />
+
+    <Button
+        android:id="@+id/btnRCancelar"
+        android:layout_width="399dp"
+        android:layout_height="match_parent"
+        android:layout_margin="9dp"
+        android:layout_weight="1"
+        android:background="#FFFF0000"
+        android:insetLeft="20dp"
+        android:insetRight="0dp"
+        android:text="Cancelar"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:backgroundTint="#FF1F1F" />
+
+
+</LinearLayout>
