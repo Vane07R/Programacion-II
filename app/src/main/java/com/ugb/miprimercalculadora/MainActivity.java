@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +37,33 @@ import java.util.ArrayList;
 //Roger Alberto Chávez Zelaya
 //Elmer Antonio Angel Reyes
 
-public class MainActivity extends AppCompatActivity     {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener    {
+EditText user, pass;
+Button btnEntrar, btnRegistrar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user=(EditText)findViewById(R.id.User);
+        pass=(EditText)findViewById(R.id.Contraseña);
+        btnEntrar=(Button)findViewById(R.id.btnIniciarSesión);
+        btnRegistrar=(Button)findViewById(R.id.btnRegistrar);
+        btnEntrar.setOnClickListener(this);
+        btnRegistrar.setOnClickListener(this);
+
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnIniciarSesión:
+                break;
+            case R.id.btnRegistrar:
+                Intent i=new Intent(MainActivity.this,RegistarActivity.class);
+                startActivity(i);
+                break;
+        }
+    }
 }
