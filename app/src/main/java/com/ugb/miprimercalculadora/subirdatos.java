@@ -71,7 +71,7 @@ public class subirdatos extends AsyncTask<String, String, String> {
             jsonResponse = stringBuffer.toString();
             return jsonResponse;
         }catch (Exception e){
-            Log.d("Cargando datos", "Error: "+ e.getMessage());
+            Log.d("Cargando menus", "Error: "+ e.getMessage());
         }
         return null;
     }
