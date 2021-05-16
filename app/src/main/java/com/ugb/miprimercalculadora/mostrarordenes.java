@@ -51,11 +51,8 @@ public class mostrarordenes extends AppCompatActivity {
         setContentView(R.layout.activity_mostarmenu);
 
         nombre1 = findViewById(R.id.nombre);
-        dui1 = findViewById(R.id.dui);
-
-
+        
         nombre1.setText(getIntent().getStringExtra("nombre"));
-        dui1.setText(getIntent().getStringExtra("duii"));
 
     }
 
