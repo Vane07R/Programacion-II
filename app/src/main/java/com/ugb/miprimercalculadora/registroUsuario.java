@@ -47,16 +47,13 @@ public class registroUsuario extends AppCompatActivity {
             temp = findViewById(R.id.txttelefono);
             String telefono = temp.getText().toString();
 
-            temp = findViewById(R.id.txtprofecion);
-            String profecion = temp.getText().toString();
-
             temp = findViewById(R.id.txtcorreo);
             String correo = temp.getText().toString();
 
-            temp = findViewById(R.id.txtcontraseña);
-            String contraseña = temp.getText().toString();
+            temp = findViewById(R.id.txtcontra);
+            String pass = temp.getText().toString();
 
-            String[] datos = {nombre, dui, telefono, profecion, correo, contraseña};
+            String[] datos = {nombre, dui, telefono, correo, pass};
             miconexion.agregar_usuario(accion, datos);
 
             mensajes("Registro guardado con exito.");

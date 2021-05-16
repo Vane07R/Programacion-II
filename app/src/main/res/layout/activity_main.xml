@@ -18,7 +18,7 @@
     </ImageView>
 
     <EditText
-        android:id="@+id/txtusu"
+        android:id="@+id/txtuss"
         android:layout_below="@id/imglogo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,10 +29,10 @@
         android:hint="Usuario" />
 
     <EditText
-        android:id="@+id/txtcontraseña"
+        android:id="@+id/txtcontra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtusu"
+        android:layout_below="@+id/txtuss"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="15dp"
@@ -43,7 +43,7 @@
         android:id="@+id/btniniciar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtcontraseña"
+        android:layout_below="@id/txtcontra"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="15dp"

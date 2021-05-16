@@ -25,12 +25,11 @@ class mostrarordenes extends AppCompatActivity {
     public static  final String nombre="nombre";
     public static  final String duii="duii";
     public static  final String telefono="telefono";
-    public static  final String profecion="profecion";
-    public static  final String mail="mail";
-    public static  final String passw="passw";
+    public static  final String correo="correo";
+    public static  final String contra="contra";
 
 
-    TextView nombre1, dui1, telefotol,profecion1,correo1,passw1;
+    TextView nombre1, dui1, telefotol,profecion1,correo1,contra1;
 
 
     FloatingActionButton btnadd;

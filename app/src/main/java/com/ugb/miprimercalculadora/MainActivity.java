@@ -40,31 +40,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void logi() {
         try {
-            temp = findViewById(R.id.txtusu);
+            temp = findViewById(R.id.txtuss);
             String dui = temp.getText().toString();
 
-            temp = findViewById(R.id.txtcontraseña);
-            String contraseña = temp.getText().toString();
+            temp = findViewById(R.id.txtcontra);
+            String contra = temp.getText().toString();
 
             miconexion = new DB(getApplicationContext(), "", null, 1);
-            datosusuariocursor = miconexion.consultar_usuario("consultar", dui, contraseña);
+            datosusuariocursor = miconexion.consultar_usuario("consultar", dui, contra);
             if( datosusuariocursor.moveToFirst() ) {
 
                 String nombre = datosusuariocursor.getString(1);
                 String duii = datosusuariocursor.getString(2);
                 String telefono = datosusuariocursor.getString(3);
-                String mail = datosusuariocursor.getString(4);
-                String passw = datosusuariocursor.getString(5);
-                String profecion = datosusuariocursor.getString(6);
+                String correo = datosusuariocursor.getString(4);
+                String contraa = datosusuariocursor.getString(5);
+
 
                 mensajes("Bienvenido " + nombre);
                 Intent i = new Intent(MainActivity.this, mostrarordenes.class);
                 i.putExtra(mostrarordenes.nombre, nombre);
                 i.putExtra(mostrarordenes.duii,duii);
                 i.putExtra(mostrarordenes.telefono, telefono);
-                i.putExtra(mostrarordenes.profecion, profecion);
-                i.putExtra(mostrarordenes.mail, mail);
-                i.putExtra(mostrarordenes.passw,passw);
+                i.putExtra(mostrarordenes.correo, correo);
+                i.putExtra(mostrarordenes.contra,contraa);
                 startActivity(i);
             }
         }catch (Exception e){
