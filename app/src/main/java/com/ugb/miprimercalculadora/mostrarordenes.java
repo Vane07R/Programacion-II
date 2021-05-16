@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-class mostrarordenes extends AppCompatActivity {
+public class mostrarordenes extends AppCompatActivity {
     public static  final String nombre="nombre";
     public static  final String duii="duii";
     public static  final String telefono="telefono";

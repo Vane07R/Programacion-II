@@ -53,7 +53,7 @@ public class DB extends SQLiteOpenHelper {
 
         switch (accion){
             case "consultar":
-                datocursor = sqLiteDatabaseR.rawQuery("SELECT * FROM tblusuario WHERE dui = "+dui+" AND conotra ='"+contra+"'",null);
+                datocursor = sqLiteDatabaseR.rawQuery("SELECT * FROM tblusuario WHERE dui = "+dui+" AND contra ='"+contra+"'",null);
                 break;
         }
 

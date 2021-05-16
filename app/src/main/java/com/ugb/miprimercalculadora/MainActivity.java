@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         login = findViewById(R.id.btniniciar);
         registro = findViewById(R.id.btnregistrar);
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra(mostrarordenes.duii,duii);
                 i.putExtra(mostrarordenes.telefono, telefono);
                 i.putExtra(mostrarordenes.correo, correo);
-                i.putExtra(mostrarordenes.contra,contraa);
+                i.putExtra(mostrarordenes.contra,contra);
                 startActivity(i);
             }
         }catch (Exception e){
