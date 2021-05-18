@@ -6,8 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imglogo"
+        android:layout_width="225dp"
+        android:layout_height="202dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@android:drawable/btn_star_big_on">
 
+    </ImageView>
 
+    <EditText
+        android:id="@+id/txtuss"
+        android:layout_below="@id/imglogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="Usuario" />
 
+    <EditText
+        android:id="@+id/txtcontra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtuss"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="Contraseña" />
 
+    <Button
+        android:id="@+id/btniniciar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtcontra"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="Iniciar" />
+
+    <Button
+        android:id="@+id/btnregistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btniniciar"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="Registro" />
 </RelativeLayout>

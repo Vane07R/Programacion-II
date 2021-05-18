@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "95151622981",
+    "firebase_url": "https://restaurante-panapp-default-rtdb.firebaseio.com",
+    "project_id": "restaurante-panapp",
+    "storage_bucket": "restaurante-panapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95151622981:android:5652d50b8c067f4b360c2c",
+        "android_client_info": {
+          "package_name": "com.ugb.miprimercalculadora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95151622981-0htlrha68hejc378pftgi2m7067b7ttc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD__RPK7MLnycdy6MWzipl623ta6BfXbSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95151622981-0htlrha68hejc378pftgi2m7067b7ttc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
