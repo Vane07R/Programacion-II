@@ -1,83 +1,78 @@
 package com.ugb.miprimercalculadora;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.widget.Button;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 
 //Allison Vanessa Rodriguez Sosa
 //Flor Mabel Contreras Rodriguez
 //Roger Alberto Chávez Zelaya
 //Elmer Antonio Angel Reyes
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener    {
-EditText user, pass;
-Button btnEntrar, btnRegistrar;
-daoUsuario dao;
+public class MainActivity extends AppCompatActivity {
+
+    Button login, registro;
+    TextView temp;
+    DB miconexion;
+    Cursor datosusuariocursor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user=(EditText)findViewById(R.id.User);
-        pass=(EditText)findViewById(R.id.Contraseña);
-        btnEntrar=(Button)findViewById(R.id.btnIniciarSesión);
-        btnRegistrar=(Button)findViewById(R.id.btnRegistrarse);
-        btnEntrar.setOnClickListener(this);
-        btnRegistrar.setOnClickListener(this);
-        dao=new daoUsuario(this);
 
+        login = findViewById(R.id.btniniciar);
+        registro = findViewById(R.id.btnregistrar);
+
+        login.setOnClickListener(v->{
+            logi();
+        });
+
+        registro.setOnClickListener(v->{
+            Intent i = new Intent(getApplicationContext(), registroUsuario.class);
+            startActivity(i);
+        });
     }
 
+    private void logi() {
+        try {
+            temp = findViewById(R.id.txtuss);
+            String dui = temp.getText().toString();
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnIniciarSesión:
-                String u=user.getText().toString();
-                String p=pass.getText().toString();
-                if(u.equals("")&&p.equals("")){
-                    Toast.makeText(this,"Erro:Campos vacios",Toast.LENGTH_LONG).show();
-                }else  if(dao.login(u,p)==1){
-                    Usuario ux=dao.getUsuario(u,p);
-                    Toast.makeText(this,"Datos correctos",Toast.LENGTH_LONG).show();
-                    Intent i2=new Intent(MainActivity.this,InicioActivity.class);
-                    i2.putExtra("Id",ux.getId());
-                    startActivity(i2);
-                    finish();
-                }
-                break;
-            case R.id.btnRegistrarse:
-                Intent i=new Intent(MainActivity.this,RegistarActivity.class);
+            temp = findViewById(R.id.txtcontra);
+            String contra = temp.getText().toString();
+
+            miconexion = new DB(getApplicationContext(), "", null, 1);
+            datosusuariocursor = miconexion.consultar_usuario("consultar", dui, contra);
+            if( datosusuariocursor.moveToFirst() ) {
+
+                String nombre = datosusuariocursor.getString(1);
+                String duii = datosusuariocursor.getString(2);
+                String telefono = datosusuariocursor.getString(3);
+                String correo = datosusuariocursor.getString(4);
+                String contraa = datosusuariocursor.getString(5);
+
+
+                mensajes("Bienvenido " + nombre);
+                Intent i = new Intent(MainActivity.this, mostrarordenes.class);
+                i.putExtra(mostrarordenes.nombre, nombre);
+                i.putExtra(mostrarordenes.duii,duii);
+                i.putExtra(mostrarordenes.telefono, telefono);
+                i.putExtra(mostrarordenes.correo, correo);
+                i.putExtra(mostrarordenes.contra,contra);
                 startActivity(i);
-                break;
+            }
+        }catch (Exception e){
+            mensajes("No se encontro el usuario");
         }
+    }
+
+    private void mensajes(String msg){
+        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
     }
 }
