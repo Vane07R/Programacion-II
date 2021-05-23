@@ -8,6 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 //Allison Vanessa Rodriguez Sosa
 //Flor Mabel Contreras Rodriguez
@@ -15,7 +18,9 @@ import android.widget.Button;
 //Elmer Antonio Angel Reyes
 
 public class MainActivity extends AppCompatActivity {
-
+    TextView tempVal;
+    Button btnGuardar;
+    DatabaseReference databaseReference;
     Button login, registro;
     TextView temp;
     DB miconexion;
@@ -37,6 +42,21 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), registroUsuario.class);
             startActivity(i);
         });
+
+        guardarUsuario();//Para la Firebase
+    }
+
+    private void guardarUsuario() {//Firebase
+        try {
+            databaseReference = FirebaseDatabase.getInstance().getReference("usuarios");
+        }catch (Exception ex){
+            mostrarMsgToast(ex.getMessage());
+        }
+
+
+    }
+    private void mostrarMsgToast(String msg){
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     private void logi() {
