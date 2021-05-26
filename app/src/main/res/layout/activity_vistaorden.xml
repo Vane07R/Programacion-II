@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/imgfotoorden"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp" />
+
+
+            <TextView
+                android:id="@+id/txtnombree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgfotoorden"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Platillo"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtdescripcionn"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_below="@id/txtnombree"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Descripcion del platillo"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtesperaa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtdescripcionn"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Tiempo de espera"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtprecioo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtesperaa"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Precio"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtmesaa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtprecioo"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Mesa"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtbebidaa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtmesaa"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Bebida"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtpostree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtbebidaa"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Postre"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btneliminarorden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtpostre"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Eliminar Orden" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnregresar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="25dp"
+        android:layout_gravity="right"
+        android:src="@drawable/abc_vector_test" />
+
+</RelativeLayout>
