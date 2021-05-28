@@ -16,13 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <VideoView
-                android:id="@+id/vipelicula"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -40,31 +33,23 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/btncargarvideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:text="Cargar Trailer" />
-
             <EditText
-                android:id="@+id/txtTitulo"
+                android:id="@+id/txtPlatillo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imgfotopelicula1"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
-                android:hint="Titulo de pelicula" />
+                android:hint="Platillo - postre:" />
 
             <EditText
-                android:id="@+id/txtsinopsis"
+                android:id="@+id/txtBebida"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtsinopsis"
+                android:layout_below="@id/txtBebida"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
-                android:hint="Sinopsis" />
+                android:hint="Bebida - Fria o Caliente:" />
 
             <EditText
                 android:id="@+id/txtduracion"
@@ -73,7 +58,7 @@
                 android:layout_below="@id/txtduracion"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
-                android:hint="Duracion de la pelicula" />
+                android:hint="Duracion de la orden" />
 
             <EditText
                 android:id="@+id/txtprecio"
@@ -82,7 +67,7 @@
                 android:layout_below="@id/txtprecio"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
-                android:hint="Precio de la pelicula:" />
+                android:hint="Precio de la orden:" />
 
             <Button
                 android:id="@+id/btnguardarpelicula"
@@ -91,7 +76,7 @@
                 android:layout_below="@id/txtprecio"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Guardar registro de pelicula " />
+                android:text="Guardar pedido " />
 
         </LinearLayout>
     </ScrollView>
