@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             temp = findViewById(R.id.txtcontra);
             String contra = temp.getText().toString();
 
-            miconexion = new DB(getApplicationContext(), "", null, 1);
+            miconexion = new DB(getApplicationContext(), "", null, 2);
             datosusuariocursor = miconexion.consultar_usuario("consultar", dui, contra);
             if( datosusuariocursor.moveToFirst() ) {
 
