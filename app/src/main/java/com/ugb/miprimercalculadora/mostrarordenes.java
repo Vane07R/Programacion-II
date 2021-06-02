@@ -7,14 +7,13 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,8 +31,8 @@ public class mostrarordenes extends AppCompatActivity {
     TextView nombre1, dui1, telefotol,profecion1,correo1,contra1;
 
 
-    FloatingActionButton btnadd;
     DB miconexion;
+    Button agregar;
     ListView ltsmenu;
     Cursor datosmenucursor = null;
     ArrayList<menu> menuArrayList=new ArrayList<menu>();
@@ -53,6 +52,12 @@ public class mostrarordenes extends AppCompatActivity {
         nombre1 = findViewById(R.id.nombre);
 
         nombre1.setText(getIntent().getStringExtra("nombre"));
+
+        agregar = findViewById(R.id.btnagregarr);
+        agregar.setOnClickListener(v->{
+            Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
+            startActivity(i);
+        });
 
     }
 

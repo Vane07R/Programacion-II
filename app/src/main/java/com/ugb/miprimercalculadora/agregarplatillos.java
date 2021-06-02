@@ -1,11 +1,5 @@
 package com.ugb.miprimercalculadora;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentUris;
@@ -21,10 +15,15 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,7 +47,7 @@ public class agregarplatillos extends AppCompatActivity {
         setContentView(R.layout.activity_agregarorden);
         btnregresar = findViewById(R.id.btnregresar);
         imgfoto = findViewById(R.id.imgfoto);
-        btnagregar = findViewById(R.id.btnguardarpelicula);
+        btnagregar = findViewById(R.id.btnguardarorden);
 
         btnregresar.setOnClickListener(v -> {
             regresarmainactivity();
@@ -57,7 +56,6 @@ public class agregarplatillos extends AppCompatActivity {
         imgfoto.setOnClickListener(v -> {
             abrirgaleriaimagen();
         });
-
 
         btnagregar.setOnClickListener(v -> {
             agregar();
@@ -169,7 +167,7 @@ public class agregarplatillos extends AppCompatActivity {
     }
 
     private void regresarmainactivity() {
-        Intent i = new Intent(getApplicationContext(),mostrarordenes.class);
+        Intent i = new Intent(getApplicationContext(), mostrarordenes.class);
         startActivity(i);
     }
 

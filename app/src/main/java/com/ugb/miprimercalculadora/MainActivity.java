@@ -1,8 +1,5 @@
 package com.ugb.miprimercalculadora;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -13,12 +10,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton btnadd;
     DB miconexion;
     ListView ltsmenu;
     Cursor datosusuariocursor = null;
@@ -70,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.btniniciar);
         registro = findViewById(R.id.btnregistrar);
 
+
         login.setOnClickListener(v->{
             logi();
         });
@@ -78,21 +77,16 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), registroUsuario.class);
             startActivity(i);
         });
-        btnadd = findViewById(R.id.btnagregar);
-        btnadd.setOnClickListener(v->{
-            Agregar("nuevo");
-        });
+
+
+        di = new detectarInternet(getApplicationContext());
 
         obtenerDatos();
     }
 
-
-
-
     private void mostrarMsgToast(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
-
 
     private void logi() {
         try {

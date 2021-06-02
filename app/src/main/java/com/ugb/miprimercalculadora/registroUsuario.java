@@ -63,7 +63,7 @@ public class registroUsuario extends AppCompatActivity {
         }
     }
     private void regresarmainactivity() {
-        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
     }
 
