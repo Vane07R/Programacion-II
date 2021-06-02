@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,19 +35,23 @@ import java.util.ArrayList;
 //Elmer Antonio Angel Reyes
 
 public class MainActivity extends AppCompatActivity {
+
+    FloatingActionButton btnadd;
+    DB miconexion;
+    ListView ltsmenu;
+    Cursor datosusuariocursor = null;
     ArrayList<menu> menuArrayList=new ArrayList<menu>();
     ArrayList<menu> menuArrayListCopy=new ArrayList<menu>();
     menu mismenud;
     JSONArray jsonArrayDatosmenu;
     JSONObject jsonObjectDatosmenu;
-    FloatingActionButton btnadd;
+    utilidades u;
+    String idlocal;
+    detectarInternet di;
     Button login, registro;
     TextView temp;
-    DB miconexion;
-    ListView ltsmenu;
-    Cursor datosusuariocursor = null;
-    detectarInternet di;
-    utilidades u;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         obtenerDatos();
     }
+
 
 
 
@@ -114,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void mensajes(String msg){
         Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
     }
@@ -126,13 +136,34 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
 
     }
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getMenuInflater();
+        //menuInflater.inflate(R.menu.menu_productos, menu);
+        try {
+            if(di.hayConexionInternet()) {
+                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
+                position = adapterContextMenuInfo.position;
+                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(po).getJSONObject("value").getString("titulo"));
+            } else {
+                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)menuInfo;
+                datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
+                menu.setHeaderTitle(datospeliculasdcursor.getString(1));
+            }
+            idlocal = datospeliculasdcursor.getString(0);
+        }catch (Exception e){
+            mensajes(e.getMessage());
+        }
+    }
+
 
 
    private void obtenerDatosOffLine() {
      try {
          miconexion = new DB(getApplicationContext(), "", null, 1);
-        datosusuariocursor = miconexion.administracion_peliculas("Consultar", null);
-       if( datospeliculasdcursor.moveToFirst() ){
+        datosusuariocursor = miconexion.consultar_menu("Consultar", null);
+       if( datosusuariocursor.moveToFirst() ){
          mostrarDatos();
      } else {
                 mensajes("No hay datos registrados");
@@ -205,7 +236,8 @@ public class MainActivity extends AppCompatActivity {
                             datosusuariocursor.getString(6),
                             datosusuariocursor.getString(7),
                             datosusuariocursor.getString(8),
-                            datosusuariocursor.getString(6)
+                            datosusuariocursor.getString(9)
+
                     );
                     menuArrayList.add(mismenud);
                 }while(datosusuariocursor.moveToNext());

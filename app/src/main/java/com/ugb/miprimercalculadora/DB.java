@@ -47,25 +47,18 @@ public class DB extends SQLiteOpenHelper {
         }
 
         return datocursor; }
-        public Cursor administracion_menu (String accion,String[] datos){
-         Cursor datocursor= null;
-            SQLiteDatabase sqLiteDatabaseW = getWritableDatabase();
-            SQLiteDatabase sqLiteDatabaseR = getReadableDatabase();
+    public Cursor consultar_menu(String accion, String[]datos){
+        Cursor datocursor1 = null;
+        SQLiteDatabase sqLiteDatabaseW = getWritableDatabase();
+        SQLiteDatabase sqLiteDatabaseR = getReadableDatabase();
 
-            switch (accion){
-
-                case "Consultar":
-                    datocursor =sqLiteDatabaseR.rawQuery("select * from tblmenu",null);
-                    break;
-                case "nuevo":
-                    sqLiteDatabaseW.execSQL("INSERT INTO tblmenu (nombremenu,descripcionmenu,espera,precio,mesa,bebida,postre,urlfoto, urlvideo)VALUES ('"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"','"+datos[7]+"','"+datos[8]+"'),,'"+datos[9]+"'");
-                    break;
-                case "modificar":
-                    sqLiteDatabaseW.execSQL("update tblmenu set nombremenu='"+datos[2]+"',descripcionmenu='"+datos[3]+"',espera='"+datos[4]+"',precio='"+datos[5]+"',urlfoto='"+datos[5]+"',urlvideo='"+datos[6]+"' where idmenu='"+datos[0]+"'");
-                 break;
-            }return datocursor;
-
+        switch (accion){
+            case "Consultar1":
+                datocursor1 = sqLiteDatabaseR.rawQuery("select * from tblmenu",null);
+                break;
         }
+
+        return datocursor1; }
 
     public Cursor consultar_usuario(String accion, String dui, String contra){
         Cursor datocursor = null;
