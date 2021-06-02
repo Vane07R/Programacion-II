@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import androidx.annotation.Nullable;
 
 //Allison Vanessa Rodriguez Sosa
@@ -11,16 +12,11 @@ import androidx.annotation.Nullable;
 //Roger Alberto Chávez Zelaya
 //Elmer Antonio Angel Reyes
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import androidx.annotation.Nullable;
 
 public class DB extends SQLiteOpenHelper {
     static String nombre_bd = "DB_usuario";
     static String tblusu = "CREATE TABLE tblusuario(idusuario integer primary key autoincrement, nombre text, dui text, telefono text, correo text, contra text)";
-    static String tblmenu ="CREATE TABLE tblmenu(idmenu integer primary key autoincrement,idusuario text, nombremenu text , descripcionmenu text, espera text ,precio text,mesa text, bebida text, postre text,urlfoto text, urlvideo text )";
+    static String tblmenu ="CREATE TABLE tblmenu(idmenu integer primary key autoincrement,idmenu text, nombremenu text , descripcionmenu text, espera text ,precio text,mesa text, bebida text, postre text,urlfoto text )";
     public DB(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, nombre_bd, factory, version);
     }
@@ -47,18 +43,25 @@ public class DB extends SQLiteOpenHelper {
         }
 
         return datocursor; }
+
     public Cursor consultar_menu(String accion, String[]datos){
-        Cursor datocursor1 = null;
+        Cursor datocursor = null;
         SQLiteDatabase sqLiteDatabaseW = getWritableDatabase();
         SQLiteDatabase sqLiteDatabaseR = getReadableDatabase();
 
         switch (accion){
             case "Consultar1":
-                datocursor1 = sqLiteDatabaseR.rawQuery("select * from tblmenu",null);
+                datocursor = sqLiteDatabaseR.rawQuery("select * from tblmenu",null);
+                break;
+            case "nuevo1":
+                sqLiteDatabaseW.execSQL("INSERT INTO tblmenu(nombremenu, descripcionmenu, espera,precio ,mesa , bebida , postre) VALUES ('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"','"+datos[7]+"')");
+                break;
+            case "modificar":
+                sqLiteDatabaseW.execSQL("update tblmenu set nombremenu='"+datos[1]+"',descripcionmenu='"+datos[2]+"',espera='"+datos[3]+"',precio='"+datos[4]+"',mesa='"+datos[5]+"',bebida='"+datos[6]+"',postre='"+datos[7]+"' where idmenu='"+datos[0]+"'");
                 break;
         }
 
-        return datocursor1; }
+        return datocursor; }
 
     public Cursor consultar_usuario(String accion, String dui, String contra){
         Cursor datocursor = null;
@@ -71,6 +74,19 @@ public class DB extends SQLiteOpenHelper {
                 break;
         }
 
+        return datocursor; }
+
+    public Cursor eliminar(String accion,String idd){
+        Cursor datocursor = null;
+        SQLiteDatabase sqLiteDatabaseW = getWritableDatabase();
+        SQLiteDatabase sqLiteDatabaseR = getReadableDatabase();
+
+        switch (accion){
+
+            case "eliminar":
+                sqLiteDatabaseW.execSQL("DELETE FROM tblmenu WHERE idmenu='"+ idd+"'");
+                break;
+        }
         return datocursor; }
 }
 

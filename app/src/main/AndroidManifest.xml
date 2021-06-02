@@ -35,9 +35,9 @@
         android:theme="@style/Theme.MiPrimerCalculadora"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".agregarplatillos"></activity>
         <activity android:name=".mostrarordenes"/>
         <activity android:name=".registroUsuario" />
+        <activity android:name=".agregarplatillos"/>
         <activity android:name=".MainActivity">
 
             <intent-filter>
