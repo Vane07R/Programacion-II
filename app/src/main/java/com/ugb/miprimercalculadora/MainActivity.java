@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
    private void obtenerDatosOffLine() {
      try {
          miconexion = new DB(getApplicationContext(), "", null, 1);
-        datosusuariocursor = miconexion.administracion_me("Consultar", null);
+        datosusuariocursor = miconexion.administracion_peliculas("Consultar", null);
        if( datospeliculasdcursor.moveToFirst() ){
          mostrarDatos();
      } else {
