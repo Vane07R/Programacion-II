@@ -1,5 +1,7 @@
 package com.ugb.miprimercalculadora;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     detectarInternet di;
     Button login, registro;
     TextView temp;
+    int position = 0;
 
 
     @Override
@@ -139,25 +143,134 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater menuInflater = getMenuInflater();
-        //menuInflater.inflate(R.menu.menu_productos, menu);
+        menuInflater.inflate(R.menu.menu_ordenes, menu);
         try {
             if(di.hayConexionInternet()) {
                 AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
                 datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
                 position = adapterContextMenuInfo.position;
-                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(po).getJSONObject("value").getString("titulo"));
+                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value").getString("titulo"));
             } else {
                 AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)menuInfo;
                 datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
-                menu.setHeaderTitle(datospeliculasdcursor.getString(1));
+                menu.setHeaderTitle(datosusuariocursor.getString(1));
             }
-            idlocal = datospeliculasdcursor.getString(0);
+            idlocal = datosusuariocursor.getString(0);
         }catch (Exception e){
             mensajes(e.getMessage());
         }
     }
+    @Override
 
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        try {
+            switch (item.getItemId()) {
+                case R.id.mnxAgregar:
+                    Agregar("nuevo");
+                    break;
+                case R.id.mnxModificar:
+                    Modificar ("modificar");
+                    break;
+                case R.id.mnxEliminar:
+                    Eliminar();
+                    break;
+            }
+        }catch (Exception ex){
+            mensajes(ex.getMessage());
+        }
+        return super.onContextItemSelected(item);
+    }
 
+    private void Eliminar(){
+        try {
+            AlertDialog.Builder confirmacion = new AlertDialog.Builder(MainActivity.this);
+            confirmacion.setTitle("Esta seguro de eliminar?");
+            if (di.hayConexionInternet())
+            {
+                jsonObjectDatosmenu = jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value");
+                confirmacion.setMessage(jsonObjectDatosmenu.getString("titulo"));
+            }else {
+                confirmacion.setMessage(datosusuariocursor.getString(1));
+            }
+
+            confirmacion.setPositiveButton("Si", (dialog, which) -> {
+
+                try {
+                    if(di.hayConexionInternet()){
+                        conexionserver objEliminar = new conexionserver();
+                        String resp =  objEliminar.execute(u.url_mto +
+                                jsonObjectDatosmenu.getString("_id")+ "?rev="+
+                                jsonObjectDatosmenu.getString("_rev"), "DELETE"
+                        ).get();
+
+                        JSONObject jsonRespEliminar = new JSONObject(resp);
+                        if(jsonRespEliminar.getBoolean("ok")){
+                            jsonArrayDatosmenu.remove(position);
+                            mostrarDatos();
+                        }
+                    }
+
+                    miconexion = new DB(getApplicationContext(), "", null, 1);
+                    datosusuariocursor = miconexion.eliminar("eliminar", datosusuariocursor.getString(0));
+                    obtenerDatos();
+                    mensajes("Menu eliminado");
+                    dialog.dismiss();
+                }catch (Exception e){
+                }
+            });
+            confirmacion.setNegativeButton("No", (dialog, which) -> {
+                mensajes("Eliminacion detendia");
+                dialog.dismiss();
+            });
+            confirmacion.create().show();
+        } catch (Exception ex){
+            mensajes(ex.getMessage());
+        }
+    }
+
+    private void Modificar(String accion){
+        Bundle parametros = new Bundle();
+        parametros.putString("accion", accion);
+        parametros.putString("idlocal", idlocal);
+        jsonObjectDatosmenu = new JSONObject();
+        JSONObject jsonValueObject = new JSONObject();
+        if(di.hayConexionInternet())
+        {
+            try {
+                if(jsonArrayDatosmenu.length()>0){
+                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString() );
+                }
+            }catch (Exception e){
+                mensajes(e.getMessage());
+            }
+        }else{
+            try {
+                jsonArrayDatosmenu = new JSONArray();
+                jsonObjectDatosmenu.put("idmenu", datosusuariocursor.getString(0));
+                jsonObjectDatosmenu.put("rev", datosusuariocursor.getString(0));
+                jsonObjectDatosmenu.put("nombremenu", datosusuariocursor.getString(1));
+                jsonObjectDatosmenu.put("descipcionmenu", datosusuariocursor.getString(2));
+                jsonObjectDatosmenu.put("espera", datosusuariocursor.getString(3));
+                jsonObjectDatosmenu.put("precio", datosusuariocursor.getString(4));
+                jsonObjectDatosmenu.put("mesa", datosusuariocursor.getString(5));
+                jsonObjectDatosmenu.put("bebida", datosusuariocursor.getString(6));
+                jsonObjectDatosmenu.put("postre", datosusuariocursor.getString(7));
+                jsonObjectDatosmenu.put("urlfoto", datosusuariocursor.getString(8));
+                jsonObjectDatosmenu.put("urltrailer", datosusuariocursor.getString(9));
+                jsonValueObject.put("value", jsonObjectDatosmenu);
+                jsonArrayDatosmenu.put(jsonValueObject);
+                if(jsonArrayDatosmenu.length()>0){
+                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString() );
+                }
+
+            }catch (Exception e){
+                mensajes(e.getMessage());
+            }
+        }
+        Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
+        i.putExtras(parametros);
+        startActivity(i);
+    }
 
    private void obtenerDatosOffLine() {
      try {
@@ -166,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
        if( datosusuariocursor.moveToFirst() ){
          mostrarDatos();
      } else {
-                mensajes("No hay datos registrados");
+                mensajes("No hay menus registrados");
             }
        }catch (Exception e){
             mensajes(e.getMessage());
@@ -209,8 +322,8 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArrayDatosmenu.length(); i++) {
                         jsonObject = jsonArrayDatosmenu.getJSONObject(i).getJSONObject("value");
                         mismenud= new menu(
-                                jsonObject.getString("_id"),
-                                jsonObject.getString("_rev"),
+                                jsonObject.getString("idmenu"),
+                                jsonObject.getString("rev"),
                                 jsonObject.getString("nombremenu"),
                                 jsonObject.getString("descripcionmenu"),
                                 jsonObject.getString("espera"),
@@ -283,5 +396,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
 
