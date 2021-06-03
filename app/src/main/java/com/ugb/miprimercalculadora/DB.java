@@ -54,10 +54,10 @@ public class DB extends SQLiteOpenHelper {
                 datocursor = sqLiteDatabaseR.rawQuery("select * from tblmenu",null);
                 break;
             case "nuevo1":
-                sqLiteDatabaseW.execSQL("INSERT INTO tblmenu(nombremenu, descripcionmenu, espera,precio ,mesa , bebida , postre) VALUES ('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"','"+datos[7]+"')");
+                sqLiteDatabaseW.execSQL("INSERT INTO tblmenu(nombremenu, descripcionmenu, espera,precio ,mesa , bebida , postre,urlfoto) VALUES ('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"','"+datos[7]+"','"+datos[8]+"')");
                 break;
             case "modificar":
-                sqLiteDatabaseW.execSQL("update tblmenu set nombremenu='"+datos[1]+"',descripcionmenu='"+datos[2]+"',espera='"+datos[3]+"',precio='"+datos[4]+"',mesa='"+datos[5]+"',bebida='"+datos[6]+"',postre='"+datos[7]+"' where idmenu='"+datos[0]+"'");
+                sqLiteDatabaseW.execSQL("update tblmenu set nombremenu='"+datos[1]+"',descripcionmenu='"+datos[2]+"',espera='"+datos[3]+"',precio='"+datos[4]+"',mesa='"+datos[5]+"',bebida='"+datos[6]+"',postre='"+datos[7]+"',urlfoto='"+datos[8]+"' where idmenu='"+datos[0]+"'");
                 break;
         }
 

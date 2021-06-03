@@ -13,7 +13,7 @@ public class menu {
     String urlfoto;
     String urlvideo;
 
-    public menu(String idmenu, String rev, String nombremenu, String descipcionmenu, String espera, String precio,String mesa,String bebida, String postre, String urlfoto, String urlvideo) {
+    public menu(String idmenu, String rev, String nombremenu, String descipcionmenu, String espera, String precio, String mesa, String bebida, String postre, String urlfoto) {
         this.idmenu = idmenu;
         this.rev = rev;
         this.nombremenu = nombremenu;
@@ -23,7 +23,7 @@ public class menu {
         this.mesa = mesa;
         this.bebida = bebida;
         this.postre = postre;
-        this.urlfoto = urlfoto;
+        this.urlfoto = this.urlfoto;
         this.urlvideo = urlvideo;
     }
 

@@ -21,17 +21,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
-        android:layout_width="match_parent"
-        android:layout_height="477dp"
+        android:layout_width="401dp"
+        android:layout_height="405dp"
         android:layout_below="@id/txtbuscar">
 
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="477dp"
+            android:layout_height="405dp"
             android:layout_below="@+id/txtbuscar"
-            android:layout_marginTop="1dp">
-        </ListView>
+            android:layout_marginTop="1dp"></ListView>
 
     </androidx.cardview.widget.CardView>
     <Button
