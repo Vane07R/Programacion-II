@@ -37,7 +37,7 @@ public class mostrarordenes extends AppCompatActivity {
     Cursor datosmenucursor = null;
     ArrayList<menu> menuArrayList=new ArrayList<menu>();
     ArrayList<menu> menuArrayListCopy=new ArrayList<menu>();
-    menu mismenu;
+    menu mismenus;
     JSONArray jsonArrayDatosmenu;
     JSONObject jsonObjectDatosmenu;
     String idlocal;

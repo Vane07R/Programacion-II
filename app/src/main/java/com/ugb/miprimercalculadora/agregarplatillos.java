@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -37,9 +39,11 @@ public class agregarplatillos extends AppCompatActivity {
     String urldefoto="", urldevideo="",idmenu, accion = "nuevo", rev;
     Button btnagregar, btncargarvideo;
     TextView temp;
+    detectarInternet da;
     private static final int RPQ= 100;
     private static final int RIG= 101;
     private static final int RVD= 102;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,17 @@ public class agregarplatillos extends AppCompatActivity {
         });
 
         permisos();
+        controles();
         //  mostrardatos();
+    }
+
+
+
+    private void controles() {
+        //Controles de video
+        MediaController mediaController = new MediaController(this);
+        vdidep.setMediaController(mediaController);
+        mediaController.setAnchorView(vdidep);
     }
 
     private void agregar() {
@@ -105,6 +119,12 @@ public class agregarplatillos extends AppCompatActivity {
             datosmenu.put("postre",postre);
             datosmenu.put("urlfoto",urldefoto);
             datosmenu.put("urltriler",urldevideo);
+
+            da = new detectarInternet(getApplicationContext());
+            if (da.hayConexionInternet()) {
+                subirdatos guardarpelis = new subirdatos(getApplicationContext());
+                String resp = guardarpelis.execute(datosmenu.toString()).get();
+            }
 
             mensajes("Registro guardado con exito.");
             regresarmainactivity();

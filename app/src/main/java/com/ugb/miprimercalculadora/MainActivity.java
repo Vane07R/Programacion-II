@@ -83,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
         di = new detectarInternet(getApplicationContext());
 
+        obtenerDatosOffLine();
         obtenerDatos();
+        mostrarDatos();
+        Eliminar();
     }
 
     private void mostrarMsgToast(String msg){
@@ -293,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception ex){
             mensajes(ex.getMessage());
         }
-
     }
     private void obtenerDatos() {
         if(di.hayConexionInternet()) {
