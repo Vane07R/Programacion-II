@@ -1,5 +1,9 @@
 package com.ugb.miprimercalculadora;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -15,9 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     DB miconexion;
     ListView ltsmenu;
     Cursor datosusuariocursor = null;
+    Cursor datomenucursor = null;
     ArrayList<menu> menuArrayList=new ArrayList<menu>();
     ArrayList<menu> menuArrayListCopy=new ArrayList<menu>();
     menu mismenud;
@@ -126,14 +128,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
     }
 
-    private void Agregar(String accion) {
-        Bundle parametros = new Bundle();
-        parametros.putString("accion", accion);
-        Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
-        i.putExtras(parametros);
-        startActivity(i);
 
-    }
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater menuInflater = getMenuInflater();
@@ -141,15 +136,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             if(di.hayConexionInternet()) {
                 AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-                datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
+                datomenucursor.moveToPosition(adapterContextMenuInfo.position);
                 position = adapterContextMenuInfo.position;
-                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value").getString("titulo"));
+                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value").getString("nombremenu"));
             } else {
                 AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)menuInfo;
-                datosusuariocursor.moveToPosition(adapterContextMenuInfo.position);
-                menu.setHeaderTitle(datosusuariocursor.getString(1));
+                datomenucursor.moveToPosition(adapterContextMenuInfo.position);
+                menu.setHeaderTitle(datomenucursor.getString(1));
             }
-            idlocal = datosusuariocursor.getString(0);
+            idlocal = datomenucursor.getString(0);
         }catch (Exception e){
             mensajes(e.getMessage());
         }
@@ -182,9 +177,9 @@ public class MainActivity extends AppCompatActivity {
             if (di.hayConexionInternet())
             {
                 jsonObjectDatosmenu = jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value");
-                confirmacion.setMessage(jsonObjectDatosmenu.getString("titulo"));
+                confirmacion.setMessage(jsonObjectDatosmenu.getString("nombremenu"));
             }else {
-                confirmacion.setMessage(datosusuariocursor.getString(1));
+                confirmacion.setMessage(datomenucursor.getString(1));
             }
 
             confirmacion.setPositiveButton("Si", (dialog, which) -> {
@@ -205,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     miconexion = new DB(getApplicationContext(), "", null, 1);
-                    datosusuariocursor = miconexion.eliminar("eliminar", datosusuariocursor.getString(0));
+                    datomenucursor = miconexion.eliminar("eliminar", datomenucursor.getString(0));
                     obtenerDatos();
                     mensajes("Menu eliminado");
                     dialog.dismiss();
@@ -240,17 +235,17 @@ public class MainActivity extends AppCompatActivity {
         }else{
             try {
                 jsonArrayDatosmenu = new JSONArray();
-                jsonObjectDatosmenu.put("idmenu", datosusuariocursor.getString(0));
-                jsonObjectDatosmenu.put("rev", datosusuariocursor.getString(0));
-                jsonObjectDatosmenu.put("nombremenu", datosusuariocursor.getString(1));
-                jsonObjectDatosmenu.put("descipcionmenu", datosusuariocursor.getString(2));
-                jsonObjectDatosmenu.put("espera", datosusuariocursor.getString(3));
-                jsonObjectDatosmenu.put("precio", datosusuariocursor.getString(4));
-                jsonObjectDatosmenu.put("mesa", datosusuariocursor.getString(5));
-                jsonObjectDatosmenu.put("bebida", datosusuariocursor.getString(6));
-                jsonObjectDatosmenu.put("postre", datosusuariocursor.getString(7));
-                jsonObjectDatosmenu.put("urlfoto", datosusuariocursor.getString(8));
-                jsonObjectDatosmenu.put("urltrailer", datosusuariocursor.getString(9));
+                jsonObjectDatosmenu.put("idmenu", datomenucursor.getString(0));
+                jsonObjectDatosmenu.put("rev", datomenucursor.getString(0));
+                jsonObjectDatosmenu.put("nombremenu",datomenucursor.getString(1));
+                jsonObjectDatosmenu.put("descipcionmenu", datomenucursor.getString(2));
+                jsonObjectDatosmenu.put("espera", datomenucursor.getString(3));
+                jsonObjectDatosmenu.put("precio", datomenucursor.getString(4));
+                jsonObjectDatosmenu.put("mesa", datomenucursor.getString(5));
+                jsonObjectDatosmenu.put("bebida", datomenucursor.getString(6));
+                jsonObjectDatosmenu.put("postre", datomenucursor.getString(7));
+                jsonObjectDatosmenu.put("urlfoto", datomenucursor.getString(8));
+                jsonObjectDatosmenu.put("urltrailer", datomenucursor.getString(9));
                 jsonValueObject.put("value", jsonObjectDatosmenu);
                 jsonArrayDatosmenu.put(jsonValueObject);
                 if(jsonArrayDatosmenu.length()>0){
@@ -265,12 +260,19 @@ public class MainActivity extends AppCompatActivity {
         i.putExtras(parametros);
         startActivity(i);
     }
+    private void Agregar(String accion) {
+        Bundle parametros = new Bundle();
+        parametros.putString("accion", accion);
+        Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
+        i.putExtras(parametros);
+        startActivity(i);
 
+    }
    private void obtenerDatosOffLine() {
      try {
          miconexion = new DB(getApplicationContext(), "", null, 1);
-        datosusuariocursor = miconexion.consultar_menu("Consultar", null);
-       if( datosusuariocursor.moveToFirst() ){
+        datomenucursor = miconexion.consultar_menu("Consultar1", null);
+       if( datomenucursor.moveToFirst() ){
          mostrarDatos();
      } else {
                 mensajes("No hay menus registrados");
@@ -325,29 +327,27 @@ public class MainActivity extends AppCompatActivity {
                                 jsonObject.getString("mesa"),
                                 jsonObject.getString("bebida"),
                                 jsonObject.getString("postre"),
-                                jsonObject.getString("urlfoto"),
-                                jsonObject.getString("urltrailer")
+                               jsonObject.getString("urlfoto")
+
                         );
                         menuArrayList.add(mismenud);
                     }}
             } else {
                 do{
                     mismenud = new menu(
-                            datosusuariocursor.getString(0),
-                            datosusuariocursor.getString(1),
-                            datosusuariocursor.getString(1),
-                            datosusuariocursor.getString(2),
-                            datosusuariocursor.getString(3),
-                            datosusuariocursor.getString(4),
-                            datosusuariocursor.getString(5),
-                            datosusuariocursor.getString(6),
-                            datosusuariocursor.getString(7),
-                            datosusuariocursor.getString(8),
-                            datosusuariocursor.getString(9)
-
+                            datomenucursor.getString(0),
+                            datomenucursor.getString(1),
+                            datomenucursor.getString(1),
+                            datomenucursor.getString(2),
+                            datomenucursor.getString(3),
+                            datomenucursor.getString(4),
+                            datomenucursor.getString(5),
+                            datomenucursor.getString(6),
+                            datomenucursor.getString(7),
+                            datomenucursor.getString(8)
                     );
                     menuArrayList.add(mismenud);
-                }while(datosusuariocursor.moveToNext());
+                }while(datomenucursor.moveToNext());
             }
             adactadorImagenes adaptadorImagenes = new adactadorImagenes(getApplicationContext(), menuArrayList);
             ltsmenu.setAdapter(adaptadorImagenes);
