@@ -83,10 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
         di = new detectarInternet(getApplicationContext());
 
-        obtenerDatosOffLine();
+
         obtenerDatos();
-        mostrarDatos();
-        Eliminar();
+
     }
 
     private void mostrarMsgToast(String msg){
@@ -248,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonObjectDatosmenu.put("bebida", datomenucursor.getString(6));
                 jsonObjectDatosmenu.put("postre", datomenucursor.getString(7));
                 jsonObjectDatosmenu.put("urlfoto", datomenucursor.getString(8));
-                jsonObjectDatosmenu.put("urltrailer", datomenucursor.getString(9));
+
                 jsonValueObject.put("value", jsonObjectDatosmenu);
                 jsonArrayDatosmenu.put(jsonValueObject);
                 if(jsonArrayDatosmenu.length()>0){
@@ -283,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
        }catch (Exception e){
             mensajes(e.getMessage());
         }
-
     }
 
     private void obtenerDatosOnLine() {
@@ -296,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception ex){
             mensajes(ex.getMessage());
         }
-    }
+     }
     private void obtenerDatos() {
         if(di.hayConexionInternet()) {
             mensajes("Mostrando datos desde la nube");
