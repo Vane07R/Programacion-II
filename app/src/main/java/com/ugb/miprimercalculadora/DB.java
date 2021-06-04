@@ -26,6 +26,7 @@ public class DB extends SQLiteOpenHelper {
         db.execSQL(tblusu);
         db.execSQL(tblmenu);
 
+
     }
 
     @Override
