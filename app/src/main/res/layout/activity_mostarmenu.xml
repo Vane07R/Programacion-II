@@ -19,24 +19,20 @@
         android:hint="Buscar"
         android:textStyle="bold" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview"
-        android:layout_width="401dp"
-        android:layout_height="405dp"
-        android:layout_below="@id/txtbuscar">
+
 
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="405dp"
+            android:layout_height="460dp"
             android:layout_below="@+id/txtbuscar"
-            android:layout_marginTop="1dp"></ListView>
+            android:layout_marginTop="1dp">
 
-    </androidx.cardview.widget.CardView>
+        </ListView>
     <Button
         android:id="@+id/btnagregarr"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/cardview"
+        android:layout_below="@id/list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar" />

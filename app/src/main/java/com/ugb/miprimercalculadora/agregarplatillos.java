@@ -13,10 +13,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -36,7 +34,7 @@ public class agregarplatillos extends AppCompatActivity {
     FloatingActionButton btnregresar;
     ImageView imgfoto;
     VideoView vdidep;
-    String urldefoto="", urldevideo="",idmenu, accion = "nuevo", rev;
+    String urldefoto="", urldevideo="",idmenu, accion = "nuevo1", rev;
     Button btnagregar, btncargarvideo;
     TextView temp;
     detectarInternet da;
@@ -101,10 +99,8 @@ public class agregarplatillos extends AppCompatActivity {
                 datosmenu.put("_rev",rev);
             }
 
-
-
-            datosmenu.put("nombre",nombre);
-            datosmenu.put("descripcion",descripcion);
+            datosmenu.put("nombremenu",nombre);
+            datosmenu.put("descripcionmenu",descripcion);
             datosmenu.put("espera",espera);
             datosmenu.put("precio",precio);
             datosmenu.put("mesa",mesa);
@@ -113,10 +109,10 @@ public class agregarplatillos extends AppCompatActivity {
             datosmenu.put("urlfoto",urldefoto);
 
 
-            da = new detectarInternet(getApplicationContext());
-            if (da.hayConexionInternet()) {
-                subirdatos guardarpelis = new subirdatos(getApplicationContext());
-                String resp = guardarpelis.execute(datosmenu.toString()).get();
+            detectarInternet di = new detectarInternet(getApplicationContext());
+            if (di.hayConexionInternet()) {
+                subirdatos guardarmenus = new subirdatos(getApplicationContext());
+                String resp = guardarmenus.execute(datosmenu.toString()).get();
             }
 
             mensajes("Registro guardado con exito.");
@@ -125,6 +121,8 @@ public class agregarplatillos extends AppCompatActivity {
             mensajes(w.getMessage());
         }
     }
+
+
 
     private void permisos() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
