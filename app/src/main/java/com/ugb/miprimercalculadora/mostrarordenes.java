@@ -60,7 +60,6 @@ public class mostrarordenes extends AppCompatActivity {
         });
 
     }
-
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();
         parametros.putString("accion", accion);
@@ -68,6 +67,7 @@ public class mostrarordenes extends AppCompatActivity {
         i.putExtras(parametros);
         startActivity(i);
     }
+
 
     private void mostrarDatos() {
         try{

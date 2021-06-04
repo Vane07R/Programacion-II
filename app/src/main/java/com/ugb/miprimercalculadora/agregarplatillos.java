@@ -66,18 +66,11 @@ public class agregarplatillos extends AppCompatActivity {
         });
 
         permisos();
-        controles();
+
         //  mostrardatos();
     }
 
 
-
-    private void controles() {
-        //Controles de video
-        MediaController mediaController = new MediaController(this);
-        vdidep.setMediaController(mediaController);
-        mediaController.setAnchorView(vdidep);
-    }
 
     private void agregar() {
         try {
@@ -118,7 +111,7 @@ public class agregarplatillos extends AppCompatActivity {
             datosmenu.put("bebida",bebida);
             datosmenu.put("postre",postre);
             datosmenu.put("urlfoto",urldefoto);
-            datosmenu.put("urltriler",urldevideo);
+
 
             da = new detectarInternet(getApplicationContext());
             if (da.hayConexionInternet()) {
