@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 public class DB extends SQLiteOpenHelper {
     static String nombre_bd = "DB_usuario";
     static String tblusu = "CREATE TABLE tblusuario(idusuario integer primary key autoincrement, nombre text, dui text, telefono text, correo text, contra text)";
-    static String tblmenu ="CREATE TABLE tblmenu(idmenu integer primary key autoincrement, nombremenu text , descripcionmenu text, espera text ,precio text,mesa text, bebida text, postre text,urlfoto text )";
+    static String tblmenu ="CREATE TABLE tblmenu(idmenu integer primary key autoincrement,idmenu text, nombremenu text , descripcionmenu text, espera text ,precio text,mesa text, bebida text, postre text,urlfoto text )";
     public DB(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, nombre_bd, factory, version);
     }
@@ -25,8 +25,6 @@ public class DB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(tblusu);
         db.execSQL(tblmenu);
-
-
     }
 
     @Override

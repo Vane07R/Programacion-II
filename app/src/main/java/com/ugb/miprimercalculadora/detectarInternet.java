@@ -11,7 +11,8 @@ public class detectarInternet {
         this.context = context;
     }
     public boolean hayConexionInternet(){
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager;
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if( connectivityManager!=null ){
             NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
             if( networkInfos!=null ){
@@ -24,8 +25,6 @@ public class detectarInternet {
         }
         return false;
     }
-
-
 }
 
 
