@@ -25,21 +25,13 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"/>
-    <TextView
-        android:id="@+id/lblDuracion"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_below="@+id/lblPlatillo"
-        android:layout_marginLeft="80dp"
-        android:textColor="@color/black"
-        android:text="Duracion: "
-        android:textSize="12sp"/>
+
 
     <TextView
         android:id="@+id/lblMesa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lblDuracion"
+
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"
         android:text="Mesa: "

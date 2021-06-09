@@ -106,7 +106,7 @@ public class agregarplatillos extends AppCompatActivity {
             datosmenu.put("mesa",mesa);
             datosmenu.put("bebida",bebida);
             datosmenu.put("postre",postre);
-            datosmenu.put("urlfoto",urldefoto);
+            datosmenu.put("urlPhoto",urldefoto);
 
 
             detectarInternet di = new detectarInternet(getApplicationContext());
