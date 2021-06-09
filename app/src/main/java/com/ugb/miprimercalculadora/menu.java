@@ -11,9 +11,8 @@ public class menu {
     String bebida;
     String postre;
     String urlfoto;
-    String urlvideo;
 
-    public menu(String idmenu, String rev, String nombremenu, String descipcionmenu, String espera, String precio, String mesa, String bebida, String postre, String urlfoto, String string) {
+    public menu(String idmenu, String rev, String nombremenu, String descipcionmenu, String espera, String precio, String mesa, String bebida, String postre, String urlfoto) {
         this.idmenu = idmenu;
         this.rev = rev;
         this.nombremenu = nombremenu;
@@ -23,8 +22,7 @@ public class menu {
         this.mesa = mesa;
         this.bebida = bebida;
         this.postre = postre;
-        this.urlfoto = this.urlfoto;
-        this.urlvideo = urlvideo;
+        this.urlfoto = urlfoto;
     }
 
     public String getIdmenu() {
@@ -43,15 +41,15 @@ public class menu {
         this.rev = rev;
     }
 
-    public String getNombre() {
+    public String getNombremenu() {
         return nombremenu;
     }
 
-    public void setNombre(String nombre) {
-        this.nombremenu = nombre;
+    public void setNombremenu(String nombremenu) {
+        this.nombremenu = nombremenu;
     }
 
-    public String getDescipcion() {
+    public String getDescipcionmenu() {
         return descipcionmenu;
     }
 
@@ -105,13 +103,5 @@ public class menu {
 
     public void setUrlfoto(String urlfoto) {
         this.urlfoto = urlfoto;
-    }
-
-    public String getUrlvideo() {
-        return urlvideo;
-    }
-
-    public void setUrlvideo(String urlvideo) {
-        this.urlvideo = urlvideo;
     }
 }

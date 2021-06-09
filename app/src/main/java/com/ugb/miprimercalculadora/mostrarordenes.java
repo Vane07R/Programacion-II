@@ -9,6 +9,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,8 +72,8 @@ public class mostrarordenes extends AppCompatActivity {
         di = new detectarInternet(getApplicationContext());
 
 
-        mostrarDatos();
-
+      //  mostrarDatos();
+obtenerDatos();
     }
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();
@@ -88,13 +89,10 @@ public class mostrarordenes extends AppCompatActivity {
         try {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder(mostrarordenes.this);
             confirmacion.setTitle("Esta seguro de eliminar?");
-            if (di.hayConexionInternet())
-            {
+
                 jsonObjectDatosmenu = jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value");
                 confirmacion.setMessage(jsonObjectDatosmenu.getString("nombremenu"));
-            }else {
-                confirmacion.setMessage(datosmenucursor.getString(1));
-            }
+
 
             confirmacion.setPositiveButton("Si", (dialog, which) -> {
 
@@ -189,7 +187,7 @@ public class mostrarordenes extends AppCompatActivity {
     }
     private void obtenerDatosOnLine() {
         try {
-            com.ugb.miprimercalculadora.conexionserver conexionconServer = new com.ugb.miprimercalculadora.conexionserver();
+            conexionserver conexionconServer = new conexionserver();
             String resp = conexionconServer.execute(u.url_consulta, "GET").get();
             jsonObjectDatosmenu=new JSONObject(resp);
             jsonArrayDatosmenu = jsonObjectDatosmenu.getJSONArray("rows");
@@ -205,7 +203,7 @@ public class mostrarordenes extends AppCompatActivity {
         } else {
             mensajes("Mostrando datos locales");
         }
-        obtenerDatosOffLine();
+      //1   1  obtenerDatosOffLine();
     }
 
     private void mostrarDatos() {
@@ -228,28 +226,13 @@ public class mostrarordenes extends AppCompatActivity {
                                 jsonObject.getString("mesa"),
                                 jsonObject.getString("bebida"),
                                 jsonObject.getString("postre"),
-                                jsonObject.getString("urlfoto"),
-                                datosmenucursor.getString(9));
+                                jsonObject.getString("urlPhoto")
+                        );
+                        //        datosmenucursor.getString(9));
                         menuArrayList.add(mismenus);
                     }}
-            }else {
-                do{
-                    mismenus = new menu(
-                            datosmenucursor.getString(0),//
-                            datosmenucursor.getString(1),//
-                            datosmenucursor.getString(1),//
-                            datosmenucursor.getString(2),//
-                            datosmenucursor.getString(3),//
-                            datosmenucursor.getString(4),//
-                            datosmenucursor.getString(5),//
-                            datosmenucursor.getString(6),//
-                            datosmenucursor.getString(7),//
-                            datosmenucursor.getString(8),//
-                            datosmenucursor.getString(9)
-                    );
-                            menuArrayList.add(mismenus);
-                }while(datosmenucursor.moveToNext());
             }
+
 
             adactadorImagenes adactadorImagenes = new adactadorImagenes(getApplicationContext(), menuArrayList);
             ltsmenu.setAdapter(adactadorImagenes);
@@ -266,6 +249,10 @@ public class mostrarordenes extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_ordenes, menu);
         try {
+
+                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                position = adapterContextMenuInfo.position;
+                menu.setHeaderTitle(jsonArrayDatosmenu.getJSONObject(position).getJSONObject("value").getString("nombremenu"));
 
         }catch (Exception e){
             mensajes(e.getMessage());
