@@ -148,7 +148,7 @@ obtenerDatos();
             try {
                 jsonArrayDatosmenu = new JSONArray();
                 jsonObjectDatosmenu.put("idmenu", datosmenucursor.getString(0));
-                jsonObjectDatosmenu.put("rev", datosmenucursor.getString(0));
+                jsonObjectDatosmenu.put("rev", datosmenucursor.getString(1));
                 jsonObjectDatosmenu.put("nombremenu",datosmenucursor.getString(1));
                 jsonObjectDatosmenu.put("descipcionmenu", datosmenucursor.getString(2));
                 jsonObjectDatosmenu.put("espera", datosmenucursor.getString(3));
