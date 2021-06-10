@@ -2,8 +2,12 @@ package com.ugb.miprimercalculadora;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -11,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +49,8 @@ public class mostrarordenes extends AppCompatActivity {
     DB miconexion;
     Button agregar;
     ListView ltsmenu;
+    TextView temp;
+    ImageView imgfoto;
     Cursor datosmenucursor = null;
     ArrayList<menu> menuArrayList=new ArrayList<menu>();
     ArrayList<menu> menuArrayListCopy=new ArrayList<menu>();
@@ -51,7 +58,8 @@ public class mostrarordenes extends AppCompatActivity {
     detectarInternet di;
     JSONArray jsonArrayDatosmenu;
     JSONObject jsonObjectDatosmenu;
-    String idlocal;
+    String urldefoto;
+    String idlocal, accion = "nuevo", rev;
     utilidades u;
     int position = 0;
 
@@ -71,10 +79,13 @@ public class mostrarordenes extends AppCompatActivity {
         });
         di = new detectarInternet(getApplicationContext());
 
-
       //  mostrarDatos();
+
+        buscarProductos();
+
 obtenerDatos();
     }
+
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();
         parametros.putString("accion", accion);
@@ -82,9 +93,7 @@ obtenerDatos();
         i.putExtras(parametros);
         startActivity(i);
     }
-    private void mensajes(String msg){
-        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
-    }
+
     private void Eliminar(){
         try {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder(mostrarordenes.this);
@@ -129,49 +138,107 @@ obtenerDatos();
             mensajes(ex.getMessage());
         }
     }
-    private void Modificar(String accion){
-        Bundle parametros = new Bundle();
-        parametros.putString("accion", accion);
-        parametros.putString("idlocal", idlocal);
-        jsonObjectDatosmenu = new JSONObject();
-        JSONObject jsonValueObject = new JSONObject();
-        if(di.hayConexionInternet())
-        {
+
+    private void Modificar(String accion) {
+        if (di.hayConexionInternet()) {
             try {
-                if(jsonArrayDatosmenu.length()>0){
-                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString() );
+                Bundle parametros = new Bundle();
+                parametros.putString("accion", accion);
+
+                if (jsonArrayDatosmenu.length() > 0) {
+                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString());
                 }
-            }catch (Exception e){
+
+                Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
+                i.putExtras(parametros);
+                startActivity(i);
+
+            } catch (Exception e) {
                 mensajes(e.getMessage());
             }
-        }else{
+        } else {
+
             try {
+                Bundle parametros = new Bundle();
+                parametros.putString("accion", accion);
+                jsonObjectDatosmenu = new JSONObject();
+                JSONObject jsonValueObject = new JSONObject();
                 jsonArrayDatosmenu = new JSONArray();
-                jsonObjectDatosmenu.put("idmenu", datosmenucursor.getString(0));
-                jsonObjectDatosmenu.put("rev", datosmenucursor.getString(1));
-                jsonObjectDatosmenu.put("nombremenu",datosmenucursor.getString(1));
-                jsonObjectDatosmenu.put("descipcionmenu", datosmenucursor.getString(2));
+
+                jsonObjectDatosmenu.put("_id", datosmenucursor.getString(0));
+                jsonObjectDatosmenu.put("_rev", datosmenucursor.getString(0));
+                jsonObjectDatosmenu.put("nombremenu", datosmenucursor.getString(1));
+                jsonObjectDatosmenu.put("descripcionmenu", datosmenucursor.getString(2));
                 jsonObjectDatosmenu.put("espera", datosmenucursor.getString(3));
                 jsonObjectDatosmenu.put("precio", datosmenucursor.getString(4));
                 jsonObjectDatosmenu.put("mesa", datosmenucursor.getString(5));
                 jsonObjectDatosmenu.put("bebida", datosmenucursor.getString(6));
                 jsonObjectDatosmenu.put("postre", datosmenucursor.getString(7));
-                jsonObjectDatosmenu.put("urlfoto", datosmenucursor.getString(8));
-
+                jsonObjectDatosmenu.put("urlPhoto", datosmenucursor.getString(8));
                 jsonValueObject.put("value", jsonObjectDatosmenu);
+
                 jsonArrayDatosmenu.put(jsonValueObject);
-                if(jsonArrayDatosmenu.length()>0){
-                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString() );
+
+                if (jsonArrayDatosmenu.length() > 0) {
+                    parametros.putString("datos", jsonArrayDatosmenu.getJSONObject(position).toString());
                 }
 
-            }catch (Exception e){
+                Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
+                i.putExtras(parametros);
+                startActivity(i);
+
+            } catch (Exception e) {
                 mensajes(e.getMessage());
             }
+
         }
-        Intent i = new Intent(getApplicationContext(), agregarplatillos.class);
-        i.putExtras(parametros);
-        startActivity(i);
     }
+
+    private void buscarProductos() {
+        TextView tempVal = findViewById(R.id.txtbuscar);
+        tempVal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                menuArrayList.clear();
+                if (tempVal.getText().toString().length()<1){
+                    menuArrayList.addAll(menuArrayListCopy);
+                } else{
+                    for (menu PB : menuArrayListCopy){
+                        String nombremenu = PB.getNombremenu();
+                        String descripcionmenu = PB.getDescipcionmenu();
+                        String mesa = PB.getMesa();
+                        String precio = PB.getPrecio();
+                        String buscando = tempVal.getText().toString().trim().toLowerCase();
+                        if(nombremenu.toLowerCase().contains(buscando) ||
+                                descripcionmenu.toLowerCase().contains(buscando) ||
+                                mesa.toLowerCase().contains(buscando) ||
+                                precio.toLowerCase().contains(buscando)){
+                            menuArrayList.add(PB);
+                        }
+                    }
+                }
+                adactadorImagenes adactadorImagenes = new adactadorImagenes(getApplicationContext(), menuArrayList);
+                ltsmenu.setAdapter(adactadorImagenes);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+
+
+
+    private void mensajes(String msg){
+        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+    }
+
     private void obtenerDatosOffLine() {
         try {
             miconexion = new DB(getApplicationContext(), "", null, 1);
@@ -185,6 +252,7 @@ obtenerDatos();
             mensajes(e.getMessage());
         }
     }
+
     private void obtenerDatosOnLine() {
         try {
             conexionserver conexionconServer = new conexionserver();
@@ -196,6 +264,7 @@ obtenerDatos();
             mensajes(ex.getMessage());
         }
     }
+
     private void obtenerDatos() {
         if(di.hayConexionInternet()) {
             mensajes("Mostrando datos desde la nube");
@@ -311,6 +380,5 @@ obtenerDatos();
             return result.toString();
         }
     }
-
 
 }
