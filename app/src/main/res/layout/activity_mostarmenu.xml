@@ -20,20 +20,21 @@
         android:textStyle="bold" />
 
 
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="504dp"
+        android:layout_below="@+id/txtbuscar"
+        android:layout_marginTop="1dp">
 
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="460dp"
-            android:layout_below="@+id/txtbuscar"
-            android:layout_marginTop="1dp">
+    </ListView>
 
-        </ListView>
     <Button
         android:id="@+id/btnagregarr"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
+        android:layout_below="@id/list"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
         android:text="Agregar" />
 </RelativeLayout>

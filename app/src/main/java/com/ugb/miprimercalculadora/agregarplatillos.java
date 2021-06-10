@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,10 +36,10 @@ public class agregarplatillos extends AppCompatActivity {
     FloatingActionButton btnregresar;
     ImageView imgfoto;
     VideoView vdidep;
-    String urldefoto="", urldevideo="",idmenu, accion = "nuevo1", rev;
-    Button btnagregar, btncargarvideo;
+    String urldefoto="",idmenu, accion = "nuevo1", rev;
+    Button btnagregar ;
     TextView temp;
-    detectarInternet da;
+    detectarInternet di;
     private static final int RPQ= 100;
     private static final int RIG= 101;
     private static final int RVD= 102;
@@ -65,10 +67,8 @@ public class agregarplatillos extends AppCompatActivity {
 
         permisos();
 
-        //  mostrardatos();
+        mostrarDatos();
     }
-
-
 
     private void agregar() {
         try {
@@ -108,11 +108,10 @@ public class agregarplatillos extends AppCompatActivity {
             datosmenu.put("postre",postre);
             datosmenu.put("urlPhoto",urldefoto);
 
-
-            detectarInternet di = new detectarInternet(getApplicationContext());
+            di = new detectarInternet(getApplicationContext());
             if (di.hayConexionInternet()) {
-                subirdatos guardarmenus = new subirdatos(getApplicationContext());
-                String resp = guardarmenus.execute(datosmenu.toString()).get();
+                subirdatos guardarmenu = new subirdatos(getApplicationContext());
+                String resp = guardarmenu.execute(datosmenu.toString()).get();
             }
 
             mensajes("Registro guardado con exito.");
@@ -122,6 +121,46 @@ public class agregarplatillos extends AppCompatActivity {
         }
     }
 
+    private void mostrarDatos() {
+        try {
+            Bundle recibirparametros = getIntent().getExtras();
+            accion = recibirparametros.getString("accion");
+
+            if(accion.equals("modificar")){
+                JSONObject datos = new JSONObject(recibirparametros.getString("datos")).getJSONObject("value");
+
+                idmenu = datos.getString("_id");
+                rev = datos.getString("_rev");
+
+                temp = findViewById(R.id.txtnombre);
+                temp.setText(datos.getString("nombremenu"));
+
+                temp = findViewById(R.id.txtdescripcion);
+                temp.setText(datos.getString("descripcionmenu"));
+
+                temp = findViewById(R.id.txtespera);
+                temp.setText(datos.getString("espera"));
+
+                temp = findViewById(R.id.txtprecio);
+                temp.setText(datos.getString("precio"));
+
+                temp = findViewById(R.id.txtmesa);
+                temp.setText(datos.getString("mesa"));
+
+                temp = findViewById(R.id.txtbebida);
+                temp.setText(datos.getString("bebida"));
+
+                temp = findViewById(R.id.txtpostre);
+                temp.setText(datos.getString("postre"));
+
+                urldefoto =  datos.getString("urlPhoto");
+                Bitmap bitmap = BitmapFactory.decodeFile(urldefoto);
+                imgfoto.setImageBitmap(bitmap);
+            }
+        }catch (Exception ex){
+            mensajes(ex.getMessage());
+        }
+    }
 
 
     private void permisos() {
@@ -143,12 +182,6 @@ public class agregarplatillos extends AppCompatActivity {
                 imgfoto.setImageURI(photo);
 
                 urldefoto = getRealUrl(this,photo);
-
-
-            }else if (requestCode == RVD){
-                Uri video = dataimagen.getData();
-                vdidep.setVideoURI(video);
-                urldevideo = getRealUrl(this,video);
             }
         }
         super.onActivityResult(requestCode, resultCode, dataimagen);
@@ -236,7 +269,6 @@ public class agregarplatillos extends AppCompatActivity {
         return null;
     }
 
-
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -260,16 +292,13 @@ public class agregarplatillos extends AppCompatActivity {
         return null;
     }
 
-
     public static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-
     public static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
-
 
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
