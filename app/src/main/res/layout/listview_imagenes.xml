@@ -17,21 +17,21 @@
             android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
+
     <TextView
         android:id="@+id/lblPlatillo"
-        android:text="Patillo de: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="80dp"
-        android:textColor="@color/black"/>
-
+        android:layout_marginTop="30dp"
+        android:text="Patillo de: "
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/lblMesa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="80dp"
         android:textColor="@color/black"
         android:text="Mesa: "

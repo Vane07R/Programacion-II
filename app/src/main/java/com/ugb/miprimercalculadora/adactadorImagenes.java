@@ -43,10 +43,10 @@ public class adactadorImagenes extends BaseAdapter {
         ImageView img = encuadre.findViewById(R.id.ImgPhoto);
         try{
             mismenu = datosmenuArrayList.get(position);
-            temp.setText(mismenu.getNombremenu());
+            temp.setText("Pedido de: " + mismenu.getNombremenu());
 
             temp = encuadre.findViewById(R.id.lblMesa);
-            temp.setText(mismenu.getMesa());
+            temp.setText("Mesa # " + mismenu.getMesa());
 
             String urldefoto = mismenu.getUrlfoto();
 
