@@ -49,16 +49,14 @@ public class MainActivity extends AppCompatActivity {
     Sensor sensor;
     SensorEventListener sensorEventListener;
     TextView tempVal;
-    TextView regis;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tempVal = findViewById(R.id.lblSensorLuz);
-
-
-        activarSensorProximidad();
+        activarSensorLuz();
 
         try {
 
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         detener();
         super.onPause();
     }
-    private void activarSensorProximidad(){
+    private void activarSensorLuz(){
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         if( sensor==null ){
@@ -103,10 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 tempVal.setText( "Valor:"+event.values[0] );
                 if(event.values[0]<=10){
                     getWindow().getDecorView().setBackgroundColor(Color.parseColor("#3E3A29"));
-                } else if( event.values[0]<=20){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#A3A3A2"));
-                } else if( event.values[0]<=30){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#DADADA"));
                 } else{
                     getWindow().getDecorView().setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }

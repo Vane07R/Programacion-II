@@ -71,7 +71,7 @@ public class mostrarordenes extends AppCompatActivity {
     SensorManager sensorManager;
     Sensor sensor;
     SensorEventListener sensorEventListener;
-    TextView mostr;
+    TextView tempVal;
 
 
     @Override
@@ -79,6 +79,8 @@ public class mostrarordenes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostarmenu);
 
+        tempVal = findViewById(R.id.lblS);
+        activarSensorLuz();
 
 
         nombre1 = findViewById(R.id.nombre);
@@ -98,7 +100,47 @@ public class mostrarordenes extends AppCompatActivity {
 obtenerDatos();
     }
 
+    @Override
+    protected void onResume() {
+        iniciar();
+        super.onResume();
+    }
 
+    @Override
+    protected void onPause() {
+        detener();
+        super.onPause();
+    }
+    private void activarSensorLuz(){
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if( sensor==null ){
+            Toast.makeText(getApplicationContext(), "No dispones de sensor de Luz", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                //tempVal.setText( "Valor: Luz: "+event.values[0] );
+                if(event.values[0]<=10){
+                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#3E3A29"));
+
+                } else{
+                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+            }
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+    }
+    private void iniciar(){
+        sensorManager.registerListener(sensorEventListener,sensor,2000*1000);
+    }
+    private void detener(){
+        sensorManager.unregisterListener(sensorEventListener);
+    }
 
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();
