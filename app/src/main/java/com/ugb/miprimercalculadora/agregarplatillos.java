@@ -9,6 +9,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +45,12 @@ public class agregarplatillos extends AppCompatActivity {
     Button btnagregar ;
     TextView temp;
     detectarInternet di;
+
+    SensorManager sensorManager;
+    Sensor sensor;
+    SensorEventListener sensorEventListener;
+    TextView regis;
+
     private static final int RPQ= 100;
     private static final int RIG= 101;
     private static final int RVD= 102;
@@ -52,6 +63,7 @@ public class agregarplatillos extends AppCompatActivity {
         btnregresar = findViewById(R.id.btnregresar);
         imgfoto = findViewById(R.id.imgfoto);
         btnagregar = findViewById(R.id.btnguardarorden);
+
 
         btnregresar.setOnClickListener(v -> {
             regresarmainactivity();
@@ -69,6 +81,8 @@ public class agregarplatillos extends AppCompatActivity {
 
         mostrarDatos();
     }
+
+
 
     private void agregar() {
         try {

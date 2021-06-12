@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -63,11 +68,18 @@ public class mostrarordenes extends AppCompatActivity {
     utilidades u;
     int position = 0;
 
+    SensorManager sensorManager;
+    Sensor sensor;
+    SensorEventListener sensorEventListener;
+    TextView mostr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostarmenu);
+
+
 
         nombre1 = findViewById(R.id.nombre);
         nombre1.setText(getIntent().getStringExtra("nombre"));
@@ -85,6 +97,8 @@ public class mostrarordenes extends AppCompatActivity {
 
 obtenerDatos();
     }
+
+
 
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();

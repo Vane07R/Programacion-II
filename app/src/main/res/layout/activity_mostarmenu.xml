@@ -22,9 +22,10 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="504dp"
+        android:layout_width="399dp"
+        android:layout_height="391dp"
         android:layout_below="@+id/txtbuscar"
+        android:layout_centerInParent="true"
         android:layout_marginTop="1dp">
 
     </ListView>
