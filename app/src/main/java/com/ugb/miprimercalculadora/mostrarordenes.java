@@ -71,14 +71,14 @@ public class mostrarordenes extends AppCompatActivity {
     SensorManager sensorManager;
     Sensor sensor;
     SensorEventListener sensorEventListener;
-    TextView tempVal;
-    TextView regis;
+    TextView mostr;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostarmenu);
+
 
 
         nombre1 = findViewById(R.id.nombre);
@@ -98,52 +98,7 @@ public class mostrarordenes extends AppCompatActivity {
 obtenerDatos();
     }
 
-    protected void onResume() {
-        iniciar();
-        super.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        detener();
-        super.onPause();
-    }
-    private void activarSe(){
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if( sensor==null ){
-            Toast.makeText(getApplicationContext(), "No dispones de sensor de Luz", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        sensorEventListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                regis.setText( "Valor:"+event.values[0] );
-                if(event.values[0]<=10){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#3E3A29"));
-                } else if( event.values[0]<=20){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#A3A3A2"));
-                } else if( event.values[0]<=30){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#DADADA"));
-                } else{
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#FFFFFF"));
-                }
-            }
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
-    }
-    private void iniciar(){
-        sensorManager.registerListener(sensorEventListener,sensor,2000*1000);
-    }
-    private void detener(){
-        sensorManager.unregisterListener(sensorEventListener);
-    }
-    private void mostrarMsgToast(String msg){
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    }
 
     private void Agregar(String accion) {
         Bundle parametros = new Bundle();

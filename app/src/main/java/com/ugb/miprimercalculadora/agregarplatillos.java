@@ -49,8 +49,8 @@ public class agregarplatillos extends AppCompatActivity {
     SensorManager sensorManager;
     Sensor sensor;
     SensorEventListener sensorEventListener;
-
     TextView regis;
+
     private static final int RPQ= 100;
     private static final int RIG= 101;
     private static final int RVD= 102;
@@ -63,7 +63,8 @@ public class agregarplatillos extends AppCompatActivity {
         btnregresar = findViewById(R.id.btnregresar);
         imgfoto = findViewById(R.id.imgfoto);
         btnagregar = findViewById(R.id.btnguardarorden);
-        regis= findViewById(R.id.lblS);
+
+
         btnregresar.setOnClickListener(v -> {
             regresarmainactivity();
         });
@@ -81,52 +82,8 @@ public class agregarplatillos extends AppCompatActivity {
         mostrarDatos();
     }
 
-    protected void onResume() {
-        iniciar();
-        super.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        detener();
-        super.onPause();
-    }
-    private void activarSensorProximidad(){
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if( sensor==null ){
-            Toast.makeText(getApplicationContext(), "No dispones de sensor de Luz", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        sensorEventListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                regis.setText( "Valor:"+event.values[0] );
-                if(event.values[0]<=10){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#3E3A29"));
-                } else if( event.values[0]<=20){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#A3A3A2"));
-                } else if( event.values[0]<=30){
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#DADADA"));
-                } else{
-                    getWindow().getDecorView().setBackgroundColor(Color.parseColor("#FFFFFF"));
-                }
-            }
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-            }
-        };
-    }
-    private void iniciar(){
-        sensorManager.registerListener(sensorEventListener,sensor,2000*1000);
-    }
-    private void detener(){
-        sensorManager.unregisterListener(sensorEventListener);
-    }
-    private void mostrarMsgToast(String msg){
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    }
     private void agregar() {
         try {
             temp = findViewById(R.id.txtnombre);
